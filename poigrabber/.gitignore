@@ -1,0 +1,11 @@
+# Environments
+venv/
+
+# Byte-compliled
+__pycache__/
+
+# log files
+*.log
+
+# Pycharm project settings
+.idea/
