@@ -1,6 +1,9 @@
 # Environments
 venv/
 
+# Editor
+.idea
+
 # Byte-compliled
 __pycache__/
 
