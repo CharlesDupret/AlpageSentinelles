@@ -1,3 +1,8 @@
+# package without version
+tqdm
+
+
+# package with version
 numpy>=1.21.5
 matplotlib>=3.2.2
 GDAL==3.0.4 # pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version
@@ -7,4 +12,3 @@ xarray>=0.18.2
 tqdm~=4.63.0
 setuptools==60.10.0
 scipy>=1.8.0 # cannot read or write netCDF files without scipy installed
-
