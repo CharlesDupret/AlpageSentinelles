@@ -1,7 +1,7 @@
 import logging  # Flexible event logging system
 import os  # Portable way of using operating system dependent functionality
 from tqdm import tqdm  # A progress bar
-from poigrabber.src.item.TileCube import TileCube
+from src.poigrabber.item.TileCube import TileCube
 
 
 # logger configuration

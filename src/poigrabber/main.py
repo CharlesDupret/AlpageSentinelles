@@ -3,9 +3,8 @@ from time import perf_counter
 import logging
 
 # My imports
-from fonction.TileCubes_handling import build_TileCubes_dict
-from fonction.dataset_handling import building_and_save_dataset, merge_dataset
-
+from .fonction import build_TileCubes_dict
+from .fonction import building_and_save_dataset, merge_dataset
 
 # logger configuration
 LOG_FILE = f"{__name__}.log"
@@ -34,15 +33,14 @@ stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
 
 
-def main():
+def main(
+    tile_folder="../data/2_applicationMasque/sortie",
+    tfe_folder="../data/TFE",
+    dataset_path="../data/dataset",
+):
     """this is function build a dataset from Sentinel-2 images
     and the ground truth data
     """
-
-    # folder where tiles, TFE and dataset are stored
-    tile_folder = "/home/sirote/Bureau/2_applicationMasque/sortie"
-    tfe_folder = "/home/sirote/Bureau/TFE"
-    dataset_path = "/home/sirote/Bureau/dataset"
 
     logger.info(
         f"""
