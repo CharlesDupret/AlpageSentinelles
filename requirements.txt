@@ -11,8 +11,8 @@ pandas>=1.3.5
 xarray>=0.18.2
 tqdm~=4.63.0
 setuptools>=60.10.0
-scipy>=1.8.0  # cannot read or write netCDF files without scipy installed
+scipy>=1.8.0  # cannot read or write netCDF files without scipy installe
 
-[dev]
+# [dev]
 pytest>=3.7
 black>=7.1.2
