@@ -3,7 +3,6 @@ import os  # Portable way of using operating system dependent functionality
 import xarray as xr  # labelled multi-dimensional arrays manipulation
 from tqdm import tqdm  # A progress bar
 
-
 # logger configuration
 LOG_FILE = f"{__name__}.log"
 
@@ -71,7 +70,6 @@ def merge_dataset(dataset_path: str):
     # read all datasets
     for da_name in os.listdir(dataset_path):
         if da_name != "dataset.nc":
-
             merged_dataset.append(da_name)
 
             with xr.open_dataset(os.path.join(dataset_path, da_name)) as da:
