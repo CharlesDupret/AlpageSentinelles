@@ -83,16 +83,17 @@ def dataset_builder(tile_folder: str, tfe_folder: str, dataset_path: str) -> Non
     )
     merge_dataset(dataset_path)
 
+
 def get_tile_folder() -> str:
     """ask the use to choose the folder where tiles datas are stored"""
 
     tile_folder = input("""
     Enter the path to the tiles folder:
-    (if nothing is specified, by default in "../../data/applicationMasque/sortie")
+    (if nothing is specified, by default in "../data/applicationMasque/sortie")
     --> """)
 
     if tile_folder == '':
-        tile_folder = "../../data/applicationMasque/sortie"
+        tile_folder = "../data/applicationMasque/sortie"
 
     return tile_folder
 
@@ -102,11 +103,11 @@ def get_tfe_folder() -> str:
 
     tfe_folder = input("""
     Enter the path to the TFE folder:
-    (if nothing is specified, by default in "../../data/TFE")
+    (if nothing is specified, by default in "../data/TFE")
     --> """)
 
     if tfe_folder == '':
-        tfe_folder = "../../data/TFE"
+        tfe_folder = "../data/TFE"
 
     return tfe_folder
 
@@ -116,11 +117,11 @@ def get_dataset_folder() -> str:
 
     dataset_folder = input("""
     Enter the path where datasets will saved:
-    (if nothing is specified, by default in "../../data/dataset")
+    (if nothing is specified, by default in "../data/dataset")
     --> """)
 
     if dataset_folder == '':
-        dataset_folder = "../../data/dataset"
+        dataset_folder = "../data/dataset"
 
     return dataset_folder
 
@@ -151,16 +152,12 @@ def set_folder() -> tuple:
 def main() -> None:
     """main function of the DatasetBuilder"""
 
+    time_start = perf_counter()
     # set paths
     tile_path, tfe_path, dataset_path = set_folder()
     # run the dataset_builder
     dataset_builder(tile_path, tfe_path, dataset_path)
 
-
-if __name__ == "__main__":
-    # main script
-    time_start = perf_counter()
-    main()
     time_end = perf_counter()
 
     # Compute the process time
@@ -172,9 +169,12 @@ if __name__ == "__main__":
     # display process time
     logger.info(
         f"""
-    The script had successfully run!
-    --------------------------------
-    
-    {os.path.split(__file__)[1]} was executed in {h} hours {m} minutes and {s} seconds
-    """
-    )
+The script had successfully run!
+--------------------------------
+
+{os.path.split(__file__)[1]} was executed in {h} hours {m} minutes and {s} seconds
+        """)
+
+
+if __name__ == "__main__":
+    main()

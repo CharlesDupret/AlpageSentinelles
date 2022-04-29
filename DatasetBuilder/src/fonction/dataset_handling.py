@@ -81,4 +81,4 @@ def merge_dataset(dataset_path: str):
     # save the main dataset as "dataset.nc"
     save_path = os.path.join(dataset_path, "dataset.nc")
     dataset.to_netcdf(save_path)
-    logger.info(f"{merged_dataset} are all successfully merge in 'dataset.nc'")
+    logger.info(f"{merged_dataset} are all successfully merged in 'dataset.nc'")
