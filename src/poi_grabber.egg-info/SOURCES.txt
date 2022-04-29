@@ -1,8 +1,0 @@
-LICENSE
-README.md
-setup.py
-src/poi_grabber.egg-info/PKG-INFO
-src/poi_grabber.egg-info/SOURCES.txt
-src/poi_grabber.egg-info/dependency_links.txt
-src/poi_grabber.egg-info/requires.txt
-src/poi_grabber.egg-info/top_level.txt

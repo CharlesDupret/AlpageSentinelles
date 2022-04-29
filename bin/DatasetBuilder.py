@@ -1,6 +1,6 @@
-from src.poigrabber.main import main
+import DataBuilder
 
-
+'''
 def pip_install():
     """Automatically install requirements"""
 
@@ -8,10 +8,11 @@ def pip_install():
         with prefix('source venv/bin/activate'):
             run('pip install -r requirements.txt')
 
+'''
 
 # folder where tiles, TFE and dataset are stored
 tile_folder = "../data/applicationMasque/sortie"
 tfe_folder = "../data/TFE"
 dataset_path = "../data/dataset"
 
-main(tile_folder, tfe_folder, dataset_path)
+DataBuilder.main(tile_folder, tfe_folder, dataset_path)
