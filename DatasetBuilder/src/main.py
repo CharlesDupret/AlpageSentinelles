@@ -1,10 +1,10 @@
 import os  # Portable way of using operating system dependent functionality
-from time import perf_counter
-import logging
+from time import perf_counter  # to calculate the computation time
+import logging  # a logger
 
 # My imports
-from .fonction import build_TileCubes_dict
-from .fonction import building_and_save_dataset, merge_dataset
+from DatasetBuilder.src.fonction import build_TileCubes_dict
+from DatasetBuilder.src.fonction import building_and_save_dataset, merge_dataset
 
 # logger configuration
 LOG_FILE = f"{__name__}.log"
@@ -33,11 +33,7 @@ stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
 
 
-def main(
-    tile_folder="../data/2_applicationMasque/sortie",
-    tfe_folder="../data/TFE",
-    dataset_path="../data/dataset",
-):
+def dataset_builder(tile_folder: str, tfe_folder: str, dataset_path: str) -> None:
     """this is function build a dataset from Sentinel-2 images
     and the ground truth data
     """
@@ -86,6 +82,79 @@ def main(
     """
     )
     merge_dataset(dataset_path)
+
+def get_tile_folder() -> str:
+    """ask the use to choose the folder where tiles datas are stored"""
+
+    tile_folder = input("""
+    Enter the path to the tiles folder:
+    (if nothing is specified, by default in "../../data/applicationMasque/sortie")
+    --> """)
+
+    if tile_folder == '':
+        tile_folder = "../../data/applicationMasque/sortie"
+
+    return tile_folder
+
+
+def get_tfe_folder() -> str:
+    """ask the use to choose the folder where tfe datas are stored"""
+
+    tfe_folder = input("""
+    Enter the path to the TFE folder:
+    (if nothing is specified, by default in "../../data/TFE")
+    --> """)
+
+    if tfe_folder == '':
+        tfe_folder = "../../data/TFE"
+
+    return tfe_folder
+
+
+def get_dataset_folder() -> str:
+    """ask the use to choose the folder where dataset datas will save"""
+
+    dataset_folder = input("""
+    Enter the path where datasets will saved:
+    (if nothing is specified, by default in "../../data/dataset")
+    --> """)
+
+    if dataset_folder == '':
+        dataset_folder = "../../data/dataset"
+
+    return dataset_folder
+
+
+def set_folder() -> tuple:
+    """defined where tiles data and TFE are, and where the datasets will save"""
+
+    # set where tile are stored
+    tile_path = get_tile_folder()
+    while not os.path.exists(tile_path):
+        logger.warning(f"'{tile_path}' is not a path. Please enter a valid path.")
+        tile_path = get_tile_folder()
+
+    # set where TFE are stored
+    tfe_path = get_tfe_folder()
+    while not os.path.exists(tfe_path):
+        logger.warning(f"'{tfe_path}' is not a path. Please enter a valid path.")
+        tfe_path = get_tfe_folder()
+
+    # set the dataset folder
+    dataset_path = get_dataset_folder()
+    if not os.path.exists(tile_path):
+        os.makedirs(dataset_path)
+
+    return tile_path, tfe_path, dataset_path
+
+
+def main() -> None:
+    """main function of the DatasetBuilder"""
+
+    # set paths
+    tile_path, tfe_path, dataset_path = set_folder()
+    # run the dataset_builder
+    dataset_builder(tile_path, tfe_path, dataset_path)
 
 
 if __name__ == "__main__":

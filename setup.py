@@ -7,12 +7,12 @@ setup(
     description="A data grabber for Sentinel-2 images",
     long_description=open(
         os.path.join(
-            os.path.abspath(os.path.dirname(__file__)), "DataBuilder/src/README.md"
+            os.path.abspath(os.path.dirname(__file__)), "DatasetBuilder/src/README.md"
         )
     ).read(),
     long_description_content_type="text/markdown",
     py_modules=["poi_grabber"],
-    package_dir={"": "DataBuilder"},
+    package_dir={"": "DatasetBuilder"},
     classifiers=[
         "Programming Language :: Python ::3",
         "Programming Language :: Python ::3.6",
