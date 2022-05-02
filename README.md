@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flabexittem.fr%2Fwp-content%2Fuploads%2F2021%2F06%2Fprojet-recherche-alpagessentinelles-imagereference-scaled-e1624464324330.jpg&f=1&nofb=1"><br>
+  <img src=img/background.jpeg><br>
 </div>
 
 
