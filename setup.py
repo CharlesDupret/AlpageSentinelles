@@ -7,7 +7,7 @@ setup(
     description="A data grabber for Sentinel-2 images",
     long_description=open(
         os.path.join(
-            os.path.abspath(os.path.dirname(__file__)), "DatasetBuilder/src/README.md"
+            os.path.abspath(os.path.dirname(__file__)), "DatasetBuilder/README.md"
         )
     ).read(),
     long_description_content_type="text/markdown",
