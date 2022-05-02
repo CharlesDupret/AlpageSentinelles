@@ -12,6 +12,10 @@ based on Sentinel2 images .tiff and a .sch file as ground truth.
 
   - make sure that you have all dependence
   - run `bin/dataset_builder.py`
+  - give the path to the sentinel images and the TFE (by default in data/)
+
+  - Logs of your run will be generated in bin/.
+  - datasets will be saved by default un data/
 
 ## Dependencies
 
