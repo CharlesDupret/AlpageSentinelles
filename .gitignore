@@ -1,5 +1,6 @@
 # Projet related
-data=/
+data/
+!data/dataset
 
 # Environments
 AlpageSentinellesEnv/
