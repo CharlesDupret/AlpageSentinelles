@@ -1,9 +1,6 @@
-# Projet related
+# Projet related data
 data/*
 !data/dataset/
-
-data/dataset/*
-!dataset.nc
 
 # Environments
 AlpageSentinellesEnv/
