@@ -1,3 +1,9 @@
+
+<div align="center">
+  <img src="https://www.alpages-sentinelles.fr/wp-content/uploads/2020/05/logo_as_site.png"><br>
+</div>
+
+
 # AlpageSentinelles
 
 This is my end of study project in the context of [AlpageSentinelles](https://www.alpages-sentinelles.fr/) action and 
@@ -6,31 +12,31 @@ classification of mountain pasture characteristics from Sentinel-2 spectral imag
 
 **Goals**: Show how remote sensing can help to
 
-- Maps mountain pastures
-- Better understanding impact of climate change
-- Improve sheep management
+  - Maps mountain pastures
+  - Better understanding impact of climate change
+  - Improve sheep management
 
 *** 
 
 ## Structure of the project
 
-1. [**DatasetBuilder**](DatasetBuilder): Build a dataset based on the ground truth establish by 
+  1. [`DatasetBuilder`](DatasetBuilder): Build a dataset based on the ground truth establish by 
 [AlpageSentinelles](https://www.alpages-sentinelles.fr/)
-2. 
+  2. 
 
 
 ## Executables
 
 Executable are sored in bin/
 
-- [*dataset_builder.py*](bin) is the script to build the dataset based on the ground truth
+  - [`dataset_builder.py`](bin) is the script to build the dataset based on the ground truth
 
 
 
 ## Links
 
-- [Bibliographies]()
-- [AlpageSentinelles' drive]()
+  - [Bibliographies]()
+  - [AlpageSentinelles' drive]()
 
 
 
