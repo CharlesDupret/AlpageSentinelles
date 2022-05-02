@@ -16,6 +16,7 @@ classification of mountain pasture characteristics from Sentinel-2 spectral imag
   - Better understanding impact of climate change
   - Improve sheep management
 
+
 ## Outline
 
   1. [`DatasetBuilder`](DatasetBuilder): Build a dataset based on the ground truth establish by 
@@ -25,15 +26,12 @@ classification of mountain pasture characteristics from Sentinel-2 spectral imag
 
 *** 
 
-## Structure of the project
+### Structure of the project
 
-  - `data`: Contain the main dataset, you can also put all your local data.
+  - `data`: Contain the main dataset, you can also put all your local data like TFE.
   - `doc`: reports and other project related documents
   - `environement.yaml`: the developing environment
-
-
-### Sub-part of the project
-
+  
 
 ### Executables
 
