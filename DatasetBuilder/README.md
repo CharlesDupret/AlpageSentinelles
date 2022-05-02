@@ -34,8 +34,3 @@ below:
 ```Language
 pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version
 ```
-
-
-| Name           | Email                           | Version |
-|----------------|---------------------------------|---------|
-| Charles Dupret | charles.dupret@grenoble-inp.org | 1.0.0   |
