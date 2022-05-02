@@ -10,11 +10,12 @@ This is my end of study project in the context of [AlpageSentinelles](https://ww
 realized with [Pacte](https://www.pacte-grenoble.fr/) laboratory  based in France, Grenoble. This project is about a 
 classification of mountain pasture characteristics from Sentinel-2 spectral images. 
 
-**Goals**: Show how remote sensing can help to
+**Goals**: Show how remote sensing can help to:
 
   - Maps mountain pastures
   - Better understanding impact of climate change
   - Improve sheep management
+
 
 *** 
 
