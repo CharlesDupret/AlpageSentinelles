@@ -11,7 +11,7 @@ based on Sentinel2 images .tiff and a .sch file as ground truth.
 
 
   - make sure that you have all dependence
-  - run bin/dataset_builder.py 
+  - run `bin/dataset_builder.py`
 
 ## Dependencies
 
