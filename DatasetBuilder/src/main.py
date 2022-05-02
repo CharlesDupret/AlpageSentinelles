@@ -7,11 +7,17 @@ from DatasetBuilder.src.fonction import build_TileCubes_dict
 from DatasetBuilder.src.fonction import building_and_save_dataset, merge_dataset
 
 # logger configuration
+DIR = "log/"
 LOG_FILE = f"{__name__}.log"
 
+LOG_PATH = os.path.join(DIR, LOG_FILE)
+
 # clean previous log file
-if os.path.exists(LOG_FILE):
-    os.remove(LOG_FILE)
+if os.path.exists(LOG_PATH):
+    os.remove(LOG_PATH)
+
+if not os.path.exists(DIR):
+    os.makedirs(DIR)
 
 # logger config
 logger = logging.getLogger(__name__)
@@ -22,7 +28,7 @@ file_formatter = logging.Formatter("[%(levelname)s] %(asctime)s - %(message)s")
 stream_formatter = logging.Formatter("%(message)s")
 
 # log file
-file_handler = logging.FileHandler(LOG_FILE)
+file_handler = logging.FileHandler(LOG_PATH)
 file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
@@ -122,12 +128,12 @@ def get_dataset_folder() -> str:
     dataset_folder = input(
         """
     Enter the path where datasets will saved:
-    (if nothing is specified, by default in "../data/dataset")
+    (if nothing is specified, by default in "../data/dataset/raw_dataset")
     --> """
     )
 
     if dataset_folder == "":
-        dataset_folder = "../data/dataset"
+        dataset_folder = "../data/dataset/raw_dataset"
 
     return dataset_folder
 
