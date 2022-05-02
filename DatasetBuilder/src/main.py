@@ -87,12 +87,14 @@ def dataset_builder(tile_folder: str, tfe_folder: str, dataset_path: str) -> Non
 def get_tile_folder() -> str:
     """ask the use to choose the folder where tiles datas are stored"""
 
-    tile_folder = input("""
+    tile_folder = input(
+        """
     Enter the path to the tiles folder:
     (if nothing is specified, by default in "../data/applicationMasque/sortie")
-    --> """)
+    --> """
+    )
 
-    if tile_folder == '':
+    if tile_folder == "":
         tile_folder = "../data/applicationMasque/sortie"
 
     return tile_folder
@@ -101,12 +103,14 @@ def get_tile_folder() -> str:
 def get_tfe_folder() -> str:
     """ask the use to choose the folder where tfe datas are stored"""
 
-    tfe_folder = input("""
+    tfe_folder = input(
+        """
     Enter the path to the TFE folder:
     (if nothing is specified, by default in "../data/TFE")
-    --> """)
+    --> """
+    )
 
-    if tfe_folder == '':
+    if tfe_folder == "":
         tfe_folder = "../data/TFE"
 
     return tfe_folder
@@ -115,12 +119,14 @@ def get_tfe_folder() -> str:
 def get_dataset_folder() -> str:
     """ask the use to choose the folder where dataset datas will save"""
 
-    dataset_folder = input("""
+    dataset_folder = input(
+        """
     Enter the path where datasets will saved:
     (if nothing is specified, by default in "../data/dataset")
-    --> """)
+    --> """
+    )
 
-    if dataset_folder == '':
+    if dataset_folder == "":
         dataset_folder = "../data/dataset"
 
     return dataset_folder
@@ -173,7 +179,8 @@ The script had successfully run!
 --------------------------------
 
 {os.path.split(__file__)[1]} was executed in {h} hours {m} minutes and {s} seconds
-        """)
+        """
+    )
 
 
 if __name__ == "__main__":
