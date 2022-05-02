@@ -3,7 +3,7 @@ data/*
 !data/dataset/
 
 data/dataset/*
-!data/dataset/dataset.nc
+!dataset.nc
 
 # Environments
 AlpageSentinellesEnv/
