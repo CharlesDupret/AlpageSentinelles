@@ -16,17 +16,26 @@ classification of mountain pasture characteristics from Sentinel-2 spectral imag
   - Better understanding impact of climate change
   - Improve sheep management
 
+## Outline
+
+  1. [`DatasetBuilder`](DatasetBuilder): Build a dataset based on the ground truth establish by 
+[AlpageSentinelles](https://www.alpages-sentinelles.fr/). The associate executable script is `bin/dataset_builder.py`.
+  2. 
+  
 
 *** 
 
 ## Structure of the project
 
-  1. [`DatasetBuilder`](DatasetBuilder): Build a dataset based on the ground truth establish by 
-[AlpageSentinelles](https://www.alpages-sentinelles.fr/)
-  2. 
+  - `data`: Contain the main dataset, you can also put all your local data.
+  - `doc`: reports and other project related documents
+  - `environement.yaml`: the developing environment
 
 
-## Executables
+### Sub-part of the project
+
+
+### Executables
 
 Executable are sored in bin/
 
