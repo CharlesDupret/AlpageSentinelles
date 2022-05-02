@@ -36,7 +36,9 @@ stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
 
 
-def building_and_save_dataset(TileCube_dict: dict, dataset_path="data/dataset/raw_dataset") -> list:
+def building_and_save_dataset(
+    TileCube_dict: dict, dataset_path="data/dataset/raw_dataset"
+) -> list:
     """
     Parameters
     ----------
