@@ -1,21 +1,25 @@
 # Dataset-Builder
 
+
 ***
 
+
 ## What is it?
+
 **DataBuilder** is a script to create a Xarray Dataset of point of interest 
 based on Sentinel2 images .tiff and a .sch file as ground truth.
 
 
 ## How To Use
 
-
   - make sure that you have all dependence
-  - run `bin/dataset_builder.py`
+  - run [`bin/dataset_builder.py`](../bin)
   - give the path to the sentinel images and the TFE (by default in data/)
 
-  - Logs of your run will be generated in bin/.
-  - datasets will be saved by default un data/dataset/
+
+  - logs of your run will be generated in [bin/log/](../bin/log)
+  - datasets will be saved by default un [data/dataset/raw_dataset](../data/dataset/raw_dataset)
+
 
 ## Dependencies
 
