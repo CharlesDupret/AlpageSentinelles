@@ -187,7 +187,3 @@ The script had successfully run!
 {os.path.split(__file__)[1]} was executed in {h} hours {m} minutes and {s} seconds
         """
     )
-
-
-if __name__ == "__main__":
-    main()
