@@ -13,7 +13,11 @@ based on Sentinel2 images .tiff and a .sch file as ground truth.
 ## How To Use
 
   - make sure that you have all dependence
-  - run [`bin/dataset_builder.py`](../bin)
+  - run in you terminal:
+
+```Language
+python3 -m DatasetBuilder
+```
   - give the path to the sentinel images and the TFE (by default in data/)
 
 
