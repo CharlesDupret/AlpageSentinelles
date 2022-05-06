@@ -51,20 +51,16 @@ def building_and_save_dataset(
 
     # build and save one dataset per TileCube
     for cube_name, cube in tqdm(TileCube_dict.items(), initial=1):
-        if "32" not in cube_name:
-            # create a xr.dataset with the poi of the TileCube
-            da = cube.quick_fill_dataset()
+        # create a xr.dataset with the poi of the TileCube
+        da = cube.quick_fill_dataset()
 
-            # save the dataset in to the folder given
-            save_path = os.path.join(dataset_path, f"raw_dataset_{cube_name}.nc")
-            da.to_netcdf(save_path)
+        # save the dataset in to the folder given
+        save_path = os.path.join(dataset_path, f"raw_dataset_{cube_name}.nc")
+        da.to_netcdf(save_path)
 
-            logger.info(
-                f" --> {cube_name} is successfully saved in {dataset_path} as 'raw_dataset_{cube_name}.nc'"
-            )
-
-        else:
-            logger.info(f" --> {cube_name} is skied because it's a tile 32")
+        logger.info(
+            f" --> {cube_name} is successfully saved in {dataset_path} as 'raw_dataset_{cube_name}.nc'"
+        )
 
 
 def merge_dataset(dataset_path: str):
