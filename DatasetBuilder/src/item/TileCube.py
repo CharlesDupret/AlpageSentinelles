@@ -116,10 +116,7 @@ class TileCube:
         # fill with 1D data all_cara(poi)
         tfe = self.gt.get_tfe()
         for var in tfe:
-            if var == "geometry":
-                dataset = dataset.assign({"x": tfe[var].x})
-                dataset = dataset.assign({"y": tfe[var].y})
-            else:
+            if var != "geometry":
                 dataset = dataset.assign({var: tfe[var]})
 
         # fill the dataset with 2D data all_(poi)

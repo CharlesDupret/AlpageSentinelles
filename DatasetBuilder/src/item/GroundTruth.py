@@ -17,7 +17,13 @@ class GroundTruth:
         self.__name = os.path.split(path)[1]
         self.__path = path
         self.tfe = df.set_index("Id_sitesAS")  # using the unique index
-        self._update_typo_veg()
+
+        # TFE update
+        self.tfe.drop(labels="MILIEU", axis=1)
+        self.tfe.drop(labels="MILIEU", axis=1)
+
+        # used with old TFE
+        # self._update_typo_veg()
 
     def __repr__(self) -> str:
         return f"Ground truth points {self.__name} from {self.__path}"
