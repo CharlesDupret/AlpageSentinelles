@@ -41,6 +41,12 @@ Executable are sored in bin/
   - [`dataset_builder.py`](bin) is the script to build the dataset based on the ground truth
 
 
+## Glossary 
+  - `Tile` or `Tile Cube`: All data about a 100km by 100km (bands, time series, mask).
+  - `Slice`: A spectral images at one given time.
+  - `Layer`: One layer like a band or a mask of spectral image.
+  - `Bands`: One or several layers corresponding to spectral bands.
+  - `Mask`: Sentinel2 mask used to remove clouds and snow.
 
 ## Links
 
