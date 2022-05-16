@@ -1,6 +1,41 @@
 import os  # Portable way of using operating system dependent functionality
 from zipfile import ZipFile  # provides tools to handling ZIP file
 from osgeo import gdal  # GDAL for manipulating geospatial raster data
+import logging  # a logger
+from tqdm import tqdm  # a progress bar
+
+
+# logger configuration
+DIR = "log/"
+LOG_FILE = f"{__name__}.log"
+
+LOG_PATH = os.path.join(DIR, LOG_FILE)
+
+# clean previous log file
+if os.path.exists(LOG_PATH):
+    os.remove(LOG_PATH)
+
+if not os.path.exists(DIR):
+    os.makedirs(DIR)
+
+# logger config
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# define formats
+file_formatter = logging.Formatter("[%(levelname)s] %(asctime)s - %(message)s")
+stream_formatter = logging.Formatter("%(message)s")
+
+# log file
+file_handler = logging.FileHandler(LOG_PATH)
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+# stream log
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(stream_formatter)
+logger.addHandler(stream_handler)
 
 
 def cut_all_tile(zip_tile_folder: str, outline_folder: str, out_folder: str) -> None:
@@ -26,9 +61,10 @@ def cut_all_tile(zip_tile_folder: str, outline_folder: str, out_folder: str) -> 
         slice_list = [s for s in os.listdir(tile_path)]
 
         # cut and save all images of the tile through all dates
-        for slice_name in slice_list:
+        for slice_name in tqdm(slice_list, initial=1):
             slice_path = os.path.join(tile_path, slice_name)
             _cut_save_zip_slice(slice_path, outline_path, out_folder)
+            logger.info(f"Slice {slice_name} cut and save")
 
 
 def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> None:
@@ -96,8 +132,8 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
                 )
 
                 if not sortieTif:
-                    print(f"Error in cutting: {fichierExtrait}")
+                    logger.error(f"Error in cutting: {fichierExtrait}")
 
         # write in the logger if a mask is missing
         else:
-            print(f"They is no {name} in {slice_path}")
+            logger.warning(f"They is no {name} in {slice_path}")
