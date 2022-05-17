@@ -2,6 +2,8 @@ import os  # Portable way of using operating system dependent functionality
 from zipfile import ZipFile  # provides tools to handling ZIP file
 import gdal  # GDAL for manipulating geospatial raster data
 import logging  # a logger
+
+import numpy as np
 from tqdm import tqdm  # a progress bar
 
 
@@ -51,9 +53,6 @@ def cut_all_tile(zip_tile_folder: str, outline_folder: str, out_folder: str) -> 
     # list images
     outline_list = [outline for outline in os.listdir(outline_folder)]
     tiles_list = [name for name in os.listdir(zip_tile_folder)]
-
-    logger.info(outline_list)
-    logger.info(tiles_list)
 
     # loop through all tiles in a same year
     for tile, outline in zip(tiles_list, outline_list):
@@ -112,9 +111,15 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
 
                 if name == "bands":
                     layer_name = layer.split("_")[-1].split(".")[0]
+                    no_data = -1000
+
+                elif name == "snow_mask":
+                    layer_name = "SNW"
+                    no_data = 0
 
                 else:
                     layer_name = layer[-10:-4]
+                    no_data = 0
 
                 layer_path = os.path.join(out, f"{dir_slice_name}_{layer_name}")
 
@@ -127,7 +132,7 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
                         "PREDICTOR=2",
                     ],
                     cutlineDSName=outline_path,  # outline
-                    dstNodata=-10000,  # nodata value -10000
+                    dstNodata=no_data,  # nodata value -10000
                     xRes=10,  # x output resolution
                     yRes=-10,  # y output resolution
                     targetAlignedPixels=True,  # keep the same pixel location as the original image
@@ -135,7 +140,7 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
                 )
 
                 if not sortieTif:
-                    logger.error(f"Error in cutting: {out_folder}")
+                    logger.error(f"Error in cutting {layer_name}")
 
         # write in the logger if a mask is missing
         else:
