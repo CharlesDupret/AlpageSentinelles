@@ -1,107 +1,63 @@
 import os
-from osgeo import gdal
-import numpy
 import numpy as np
 import rasterio
 
-
-# se placer dans le répertoire "applicationMasque"
-
-# traitements des images(par bande) par tuile
-
-####################
-####################
-### Tuile 31TFJ ####
-####################
-####################
+# TODO
+def apply_mask_on_all_tiles(cut_data_path: str, out_path: str):
+    pass
 
 
-# Ouverture fichiers
+# TODO
+def apply_masks_on_tile(tile_path: str, out_path: str):
+    pass
 
 
-repDonnees = r"../1_decoupageEmpriseZip/sortie/sortieT31TFJ"
-repSortie = "sortie/sortieT31TFJ"
+def _apply_masks_on_slice(slice_path: str, saving_folder: str) -> None:
+    """apply a mask on a slice and save it into the out_path
 
-# creation liste des sous-répertoires (les différentes dates de la tuile)
+    Parameters
+    ----------
+    slice_path: path to the slice folder
+    saving_folder: where the masked slice will be saved
+    """
 
-listeRep = os.listdir(repDonnees)
+    # split bands and mask
+    layer = os.listdir(slice_path)
+    bands_dict = {b[20:]: b for b in layer if b[20] == "B"}
+    mask_dict = {b[20:]: b for b in layer if b[20] != "B"}
 
-for i in range(len(listeRep)):
-    repCourant = os.path.join(
-        repDonnees, listeRep[i]
-    )  # se positionner dans le répertoire d'une date
-    fichiersRep = os.listdir(
-        repCourant
-    )  # lister les fichiers à savoir les différentes bandes
+    # make out folder
+    os.makedirs(saving_folder, exist_ok=True)
 
-    B2 = [f for f in fichiersRep if "B2" in f]
-    B3 = [f for f in fichiersRep if "B3" in f]
-    B4 = [f for f in fichiersRep if "B4" in f]
-    B5 = [f for f in fichiersRep if "B5" in f]
-    B6 = [f for f in fichiersRep if "B6" in f]
-    B7 = [f for f in fichiersRep if "B7" in f]
-    B8 = [f for f in fichiersRep if "B8" in f]
-    B8.sort()
-    del B8[1]
-    B8A = [f for f in fichiersRep if "B8A" in f]
-    B11 = [f for f in fichiersRep if "B11" in f]
-    B12 = [f for f in fichiersRep if "B12" in f]
-    masqueCLM = [f for f in fichiersRep if "CLM" in f]
+    # import all masks array
+    master_mask = []
+    for mask_name, mask in mask_dict.items():
+        mask_path = os.path.join(slice_path, mask)
 
-    listeBandes = B2 + B3 + B4 + B5 + B6 + B7 + B8 + B8A + B11 + B12
+        # get mask values
+        with rasterio.open(mask_path, "r") as m:
+            master_mask.append(m.read(1))
 
-    for j in range(len(listeBandes)):
-        nomPartiesImage = os.path.basename(listeBandes[j]).split(
-            "_"
-        )  # séparer les parties du fichier en cours de traitement pour les réutiliser pour la sortie
-        sat = nomPartiesImage[0]
-        date = nomPartiesImage[1]
-        tuile = nomPartiesImage[2]
-        bande = nomPartiesImage[3]
+    # combine all masks in one
+    master_mask = np.nansum(master_mask, axis=0)
 
-        # définir les répertoires en sortie
-        rep = f"{sat}_{date}_{tuile}"
-        repSortieDate = os.path.join(repSortie, rep)
-        os.makedirs(repSortieDate, exist_ok=True)  # création du dossier sur le disque
+    # loop through all bands
+    for band in bands_dict.values():
+        # get band values and profile
+        band_path = os.path.join(slice_path, band)
+        with rasterio.open(band_path, "r") as m:
+            band_val = m.read(1)
+            profile = m.profile
 
-        # convertir le masque pour l'appliquer
-        nomMasque1 = "masqueConverti"
-        masque1Sortie = os.path.join(repSortieDate, nomMasque1 + ".tiff")
+        # update profile
+        profile.update(dtype=rasterio.float64, count=1, compress="lzw", nodata=np.nan)
 
-        with rasterio.open(repCourant + "/" + masqueCLM[0], "r") as src:
-            masque1Array = src.read(1)  # creation array
-            masque1Final = np.where(masque1Array == 0, 1, np.nan)
-            with rasterio.open(masque1Sortie, "w", **src.profile) as dest:
-                dest.write(masque1Final.astype(rasterio.uint8), 1)
+        # band filtering
+        filtered_band = band_val.astype(np.float64)
+        filtered_band /= 10000
+        filtered_band = np.where(master_mask == 0, np.nan, band_val)
 
-        # application du masque
-        with rasterio.open(masque1Sortie, "r") as src:
-            masque1 = src.read(1)
-            profile = src.profile
-            profile.update(
-                dtype=rasterio.float64, count=1, compress="lzw", nodata=np.nan
-            )
-            nomImageMasque = f"{sat}_{date}_{tuile}_{bande}"
-            if not os.path.exists(
-                os.path.join(repSortieDate, nomImageMasque + "_masque_scaling.tiff")
-            ):
-                img = repCourant + "/" + listeBandes[j]
-
-            with rasterio.open(img, "r") as src:
-                band = src.read(1)
-                band = band.astype(np.float64)
-                band /= 10000  # band = band / 10000
-                # band[band == 0] = np.nan
-                profile = src.profile
-                profile.update(
-                    dtype=rasterio.float64, count=1, compress="lzw", nodata=np.nan
-                )
-                imageMasque = np.multiply(masque1, band)
-                imageMasque[imageMasque == 0] = np.nan
-
-            with rasterio.open(
-                os.path.join(repSortieDate, nomImageMasque + "_masque_scaling.tiff"),
-                "w",
-                **profile,
-            ) as dst:
-                dst.write(imageMasque.astype(rasterio.float64), 1)
+        # write the masked band
+        out_path = os.path.join(saving_folder, band)
+        with rasterio.open(out_path, "w", **profile) as out:
+            out.write(filtered_band)

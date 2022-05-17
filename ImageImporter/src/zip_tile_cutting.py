@@ -6,7 +6,6 @@ import logging  # a logger
 import numpy as np
 from tqdm import tqdm  # a progress bar
 
-
 # logger configuration
 DIR = "log/"
 LOG_FILE = f"{__name__}.log"
@@ -38,6 +37,9 @@ logger.addHandler(file_handler)
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
+
+
+# TODO: add a function to cut through all years
 
 
 def cut_all_tile(zip_tile_folder: str, outline_folder: str, out_folder: str) -> None:
