@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May  6 10:01:24 2021
-
-@author: Emilie Sirot d'après le script de Valentin Barbier'
-"""
-
 import os
 from osgeo import gdal
 import numpy
