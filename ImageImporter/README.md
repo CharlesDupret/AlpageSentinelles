@@ -8,6 +8,8 @@
 
 **Image Importer** is a script to import images from....
 
+### data structure
+
 
 ## How To Use
 
