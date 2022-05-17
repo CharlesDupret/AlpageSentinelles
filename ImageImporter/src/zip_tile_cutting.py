@@ -49,8 +49,11 @@ def cut_all_tile(zip_tile_folder: str, outline_folder: str, out_folder: str) -> 
     """
 
     # list images
-    outline_list = [outline for outline in os.listdir(sentinel2_folder_path)]
-    tiles_list = [name[3:9] for name in os.listdir(sentinel2_folder_path)]
+    outline_list = [outline for outline in os.listdir(outline_folder)]
+    tiles_list = [name for name in os.listdir(zip_tile_folder)]
+
+    logger.info(outline_list)
+    logger.info(tiles_list)
 
     # loop through all tiles in a same year
     for tile, outline in zip(tiles_list, outline_list):
@@ -83,8 +86,8 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
     date = split_path[1].split("-")[0]
 
     # makedir to save the slice
-    dir_slice_name = f"{sat}_{date}_{nomParties[3]}"
-    out = os.path.join(out_folder, rep)
+    dir_slice_name = f"{sat}_{date}_{split_path[3]}"
+    out = os.path.join(out_folder, dir_slice_name)
     os.makedirs(out, exist_ok=True)
 
     # read what files are in the .zip
@@ -99,7 +102,7 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
     layer_dict = {"bands": band_list, "snow_mask": snow_mask, "cloud_mask": cloud_mask}
 
     # loop through bands and masks
-    for name, layer_list in layer_dict:
+    for name, layer_list in layer_dict.items():
 
         # ensure that bands or masks are found
         if layer_list:
@@ -108,7 +111,7 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
             for layer in layer_list:
 
                 if name == "bands":
-                    layer_name = layer[-6:-4]
+                    layer_name = layer.split("_")[-1].split(".")[0]
 
                 else:
                     layer_name = layer[-10:-4]
@@ -118,7 +121,7 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
                 # cutting .zip layer
                 sortieTif = gdal.Warp(
                     layer_path,
-                    f"/vsizip/{dossierZip}/{img}",  # we use the vsizip protocol
+                    f"/vsizip/{slice_path}/{layer}",  # we use the vsizip protocol
                     creationOptions=[
                         "COMPRESS=LZW",
                         "PREDICTOR=2",
@@ -132,7 +135,7 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
                 )
 
                 if not sortieTif:
-                    logger.error(f"Error in cutting: {fichierExtrait}")
+                    logger.error(f"Error in cutting: {out_folder}")
 
         # write in the logger if a mask is missing
         else:

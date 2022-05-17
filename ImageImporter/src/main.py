@@ -46,8 +46,8 @@ def main() -> None:
     time_start = perf_counter()
 
     # set folder
-    outline_folder = "emprise"  # folder of outline of the areas of interest
-    zip_tile_folder = "archive_zip"  # # folder containing the .zip images of Sentinel2
+    outline_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/emprise"  # folder of outline of the areas of interest
+    zip_tile_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/archive_zip"  # folder containing the .zip images of Sentinel2
     out_folder = "sortie"  # save path
 
     # cut and save Sentinel2 tiles
