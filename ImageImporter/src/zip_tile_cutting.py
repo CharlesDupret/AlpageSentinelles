@@ -1,6 +1,6 @@
 import os  # Portable way of using operating system dependent functionality
 from zipfile import ZipFile  # provides tools to handling ZIP file
-from osgeo import gdal  # GDAL for manipulating geospatial raster data
+import gdal  # GDAL for manipulating geospatial raster data
 import logging  # a logger
 from tqdm import tqdm  # a progress bar
 
