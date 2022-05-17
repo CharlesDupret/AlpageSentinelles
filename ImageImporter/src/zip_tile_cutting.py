@@ -86,12 +86,14 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
 
     # makedir to save the slice
     dir_slice_name = f"{sat}_{date}_{split_path[3]}"
-    out = os.path.join(out_folder, dir_slice_name)
+    logger.info(split_path[3])
+    out = os.path.join(f"sortie{split_path[3]}", dir_slice_name)
+    out = os.path.join(out_folder, out)
     os.makedirs(out, exist_ok=True)
 
     # read what files are in the .zip
-    with ZipFile(slice_path, "r") as zip:
-        zip_list = zip.namelist()
+    with ZipFile(slice_path, "r") as z:
+        zip_list = z.namelist()
 
     # make a dict of files to keep
     band_list = [f for f in zip_list if "FRE" in f]

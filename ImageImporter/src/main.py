@@ -48,7 +48,7 @@ def main() -> None:
     # set folder
     outline_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/emprise"  # folder of outline of the areas of interest
     zip_tile_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/archive_zip"  # folder containing the .zip images of Sentinel2
-    out_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/out"  # save path
+    out_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/sortie"  # save path
 
     # cut and save Sentinel2 tiles
     cut_all_tile(zip_tile_folder, outline_folder, out_folder)
