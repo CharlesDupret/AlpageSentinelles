@@ -4,9 +4,6 @@ import numpy
 import numpy as np
 import rasterio
 
-# drivers
-
-gdal.AllRegister()
 
 # se placer dans le répertoire "applicationMasque"
 
