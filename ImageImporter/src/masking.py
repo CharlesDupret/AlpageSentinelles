@@ -78,6 +78,7 @@ for i in range(len(listeRep)):
         # convertir le masque pour l'appliquer
         nomMasque1 = "masqueConverti"
         masque1Sortie = os.path.join(repSortieDate, nomMasque1 + ".tiff")
+
         with rasterio.open(repCourant + "/" + masqueCLM[0], "r") as src:
             masque1Array = src.read(1)  # creation array
             masque1Final = np.where(masque1Array == 0, 1, np.nan)
@@ -96,6 +97,7 @@ for i in range(len(listeRep)):
                 os.path.join(repSortieDate, nomImageMasque + "_masque_scaling.tiff")
             ):
                 img = repCourant + "/" + listeBandes[j]
+
             with rasterio.open(img, "r") as src:
                 band = src.read(1)
                 band = band.astype(np.float64)

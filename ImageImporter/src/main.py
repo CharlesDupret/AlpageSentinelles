@@ -4,7 +4,7 @@ import logging  # a logger
 
 
 # My imports
-from ImageImporter.src import cut_all_tile
+from ImageImporter.src.zip_tile_cutting import cut_all_tile
 
 
 # logger configuration
