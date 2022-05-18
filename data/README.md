@@ -21,16 +21,17 @@ data
 │
 └─── decoupageZIP
 │   └─── 2021
-│       └─── sortie
-│           └─── sortieTILE
-│               └─── TILES
-│                   └─── Slices "S2A_date_tile"
-│                       └─── Layers
-│                           "S2A_date_tile_B2"
-│                                    .
-│                                    .
-│                           "S2A_date_tile_B12"
-│                           "S2A_date_tile_mask"
+│       └─── 1_decoupageEmpriseZip
+│          └─── sortie
+│              └─── sortieTILE
+│                 └─── TILES
+│                     └─── Slices "S2A_date_tile"
+│                         └─── Layers
+│                            "S2A_date_tile_B2"
+│                                     .
+│                                     .
+│                            "S2A_date_tile_B12"
+│                            "S2A_date_tile_mask"
 │
 │
 └─── applicationMasque
