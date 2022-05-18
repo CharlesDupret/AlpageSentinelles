@@ -39,7 +39,27 @@ stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
 
 
-# TODO: add a function to cut through all years
+def tiles_cutting(zip_folder: str, data_folder: str) -> None:
+    """apply the cut_all_tile on all years
+
+    Parameters
+    ----------
+    zip_folder: folder where raw sentinel2 images are stored (decoupageZIP)
+    data_folder: where cut layer will be stored
+    """
+
+    year_list = os.listdir(zip_folder)
+
+    # loop through all years
+    for year in year_list:
+
+        # defined paths
+        outline_folder = os.path.join(zip_folder, f"{year}/1_decoupageEmpriseZip/emprise")
+        zip_tile_folder = os.path.join(zip_folder, f"{year}/1_decoupageEmpriseZip/archive_zip")
+        out_folder = os.path.join(data_folder, f"decoupageZip/{year}/1_decoupageEmpriseZip/sortie")
+
+        # cut and save Sentinel2 tiles by year
+        cut_all_tile(zip_tile_folder, outline_folder, out_folder)
 
 
 def cut_all_tile(zip_tile_folder: str, outline_folder: str, out_folder: str) -> None:

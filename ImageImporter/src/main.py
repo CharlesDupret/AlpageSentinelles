@@ -4,7 +4,8 @@ import logging  # a logger
 
 
 # My imports
-from ImageImporter.src.zip_tile_cutting import cut_all_tile
+from ImageImporter.src.tiles_cutting import tiles_cutting
+from ImageImporter.src.tiles_masking import tiles_masking
 
 
 # logger configuration
@@ -40,18 +41,23 @@ stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
 
 
+# TODO: simplified the data organisation
+
+
 def main() -> None:
     """main function of the DatasetBuilder"""
 
     time_start = perf_counter()
 
     # set folder
-    outline_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/emprise"  # folder of outline of the areas of interest
-    zip_tile_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/archive_zip"  # folder containing the .zip images of Sentinel2
-    out_folder = "../data/decoupageZip/2017/1_decoupageEmpriseZip/sortie"  # save path
+    zip_folder = "../data/decoupageZip"
+    data_folder = "../data"
 
     # cut and save Sentinel2 tiles
-    cut_all_tile(zip_tile_folder, outline_folder, out_folder)
+    tiles_cutting(zip_folder, data_folder)
+
+    # apply cloud and snow mask on cut tiles
+    tiles_masking()
 
     time_end = perf_counter()
 

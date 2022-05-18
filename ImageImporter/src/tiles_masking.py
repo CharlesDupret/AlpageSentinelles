@@ -2,23 +2,48 @@ import os
 import numpy as np
 import rasterio
 
-# TODO
-def apply_mask_on_all_tiles(cut_data_path: str, out_path: str):
-    pass
+
+def tiles_masking(cut_data_path: str, data_folder: str):
+    """apply masks on all tiles of a year
+
+    Parameters
+    ----------
+    cut_data_path: path to the import cut data
+    data_folder: path to the folder where tiles will be saved
+    """
+
+    tile_list = os.listdir(cut_data_path)
+
+    for tile in tile_list:
+        tile_path = os.path.join(cut_data_path, tile)
+        saving_tile_folder = os.path.join(data_folder, tile)
+        _apply_masks_on_tile(tile_path, saving_tile_folder)
 
 
-# TODO
-def apply_masks_on_tile(tile_path: str, out_path: str):
-    pass
+def _apply_masks_on_tile(tile_path: str, saving_tile_folder: str) -> None:
+    """apply masks on all slices of a tile in a year
+
+    Parameters
+    ----------
+    tile_path: tile path
+    saving_tile_folder: path to the folder where slices will be saved
+    """
+
+    slice_list = os.listdir(tile_path)
+
+    for tile_slice in slice_list:
+        slice_path = os.path.join(tile_path, tile_slice)
+        saving_folder = os.path.join(saving_tile_folder, tile_slice)
+        _apply_masks_on_slice(slice_path, saving_folder)
 
 
-def _apply_masks_on_slice(slice_path: str, saving_folder: str) -> None:
+def _apply_masks_on_slice(slice_path: str, saving_slice_folder: str) -> None:
     """apply a mask on a slice and save it into the out_path
 
     Parameters
     ----------
     slice_path: path to the slice folder
-    saving_folder: where the masked slice will be saved
+    saving_slice_folder: where the masked slice will be saved
     """
 
     # split bands and mask
@@ -27,7 +52,7 @@ def _apply_masks_on_slice(slice_path: str, saving_folder: str) -> None:
     mask_dict = {b[20:]: b for b in layer if b[20] != "B"}
 
     # make out folder
-    os.makedirs(saving_folder, exist_ok=True)
+    os.makedirs(saving_slice_folder, exist_ok=True)
 
     # import all masks array
     master_mask = []
@@ -58,6 +83,6 @@ def _apply_masks_on_slice(slice_path: str, saving_folder: str) -> None:
         filtered_band = np.where(master_mask == 0, np.nan, band_val)
 
         # write the masked band
-        out_path = os.path.join(saving_folder, band)
+        out_path = os.path.join(saving_slice_folder, band)
         with rasterio.open(out_path, "w", **profile) as out:
             out.write(filtered_band)
