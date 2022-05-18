@@ -156,7 +156,7 @@ def set_folder() -> tuple:
 
     # set the dataset folder
     dataset_path = get_dataset_folder()
-    if not os.path.exists(tile_path):
+    if not os.path.exists(dataset_path):
         os.makedirs(dataset_path)
 
     return tile_path, tfe_path, dataset_path
