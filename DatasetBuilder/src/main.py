@@ -185,6 +185,6 @@ def main() -> None:
 The script had successfully run!
 --------------------------------
 
-{os.path.split(__file__)[1]} was executed in {h} hours {m} minutes and {s} seconds
+{__name__} was executed in {h} hours {m} minutes and {s} seconds
         """
     )
