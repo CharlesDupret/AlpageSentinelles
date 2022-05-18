@@ -1,6 +1,42 @@
 import os
 import numpy as np
+from tqdm import tqdm
 import rasterio
+import logging
+
+
+# logger configuration
+DIR = "log/"
+LOG_FILE = f"{__name__}.log"
+
+LOG_PATH = os.path.join(DIR, LOG_FILE)
+
+# clean previous log file
+if os.path.exists(LOG_PATH):
+    os.remove(LOG_PATH)
+
+if not os.path.exists(DIR):
+    os.makedirs(DIR)
+
+# logger config
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# define formats
+file_formatter = logging.Formatter("[%(levelname)s] %(asctime)s - %(message)s")
+stream_formatter = logging.Formatter("%(message)s")
+
+# log file
+file_handler = logging.FileHandler(LOG_PATH)
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+# stream log
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(stream_formatter)
+stream_handler.setLevel(logging.INFO)
+logger.addHandler(stream_handler)
 
 
 def tiles_masking(zip_folder: str, data_folder: str) -> None:
@@ -15,15 +51,13 @@ def tiles_masking(zip_folder: str, data_folder: str) -> None:
     year_list = os.listdir(zip_folder)
 
     # loop through all years
-    for year in year_list:
-
+    for year in tqdm(year_list, desc="Cut through year processing", initial=1):
         # defined paths
         cut_data_path = os.path.join(zip_folder, f"{year}/1_decoupageEmpriseZip/sortie")
-        save_folder = os.path.join(data_folder, year)
+        save_folder = os.path.join(data_folder, f"applicationMasqueOUT/{year}")
 
         # cut and save Sentinel2 tiles by year
         _tiles_masking_by_year(cut_data_path, save_folder)
-
 
 
 def _tiles_masking_by_year(cut_data_path: str, save_folder: str):
@@ -38,6 +72,10 @@ def _tiles_masking_by_year(cut_data_path: str, save_folder: str):
     tile_list = os.listdir(cut_data_path)
 
     for tile in tile_list:
+
+        logger.info("")
+        logger.info(f"--> Processing tile {tile[-6:]}")
+
         tile_path = os.path.join(cut_data_path, tile)
         saving_tile_folder = os.path.join(save_folder, tile)
         _apply_masks_on_tile(tile_path, saving_tile_folder)
@@ -91,8 +129,10 @@ def _apply_masks_on_slice(slice_path: str, saving_slice_folder: str) -> None:
 
     # loop through all bands
     for band in bands_dict.values():
+
         # get band values and profile
         band_path = os.path.join(slice_path, band)
+
         with rasterio.open(band_path, "r") as m:
             band_val = m.read(1)
             profile = m.profile

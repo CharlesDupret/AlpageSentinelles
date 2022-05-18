@@ -36,6 +36,7 @@ logger.addHandler(file_handler)
 # stream log
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(stream_formatter)
+stream_handler.setLevel(logging.WARNING)
 logger.addHandler(stream_handler)
 
 
@@ -51,18 +52,25 @@ def tiles_cutting(zip_folder: str, data_folder: str) -> None:
     year_list = os.listdir(zip_folder)
 
     # loop through all years
-    for year in year_list:
-
+    for year in tqdm(year_list, desc="Cut through year processing", initial=1):
         # defined paths
-        outline_folder = os.path.join(zip_folder, f"{year}/1_decoupageEmpriseZip/emprise")
-        zip_tile_folder = os.path.join(zip_folder, f"{year}/1_decoupageEmpriseZip/archive_zip")
-        out_folder = os.path.join(data_folder, f"decoupageZip/{year}/1_decoupageEmpriseZip/sortie")
+        outline_folder = os.path.join(
+            zip_folder, f"{year}/1_decoupageEmpriseZip/emprise"
+        )
+        zip_tile_folder = os.path.join(
+            zip_folder, f"{year}/1_decoupageEmpriseZip/archive_zip"
+        )
+        out_folder = os.path.join(
+            data_folder, f"decoupageZip/{year}/1_decoupageEmpriseZip/sortie"
+        )
 
         # cut and save Sentinel2 tiles by year
         _tiles_cutting_by_year(zip_tile_folder, outline_folder, out_folder)
 
 
-def _tiles_cutting_by_year(zip_tile_folder: str, outline_folder: str, out_folder: str) -> None:
+def _tiles_cutting_by_year(
+    zip_tile_folder: str, outline_folder: str, out_folder: str
+) -> None:
     """cut and save all tile in a same year in the out_folder
 
     Parameters
@@ -85,7 +93,7 @@ def _tiles_cutting_by_year(zip_tile_folder: str, outline_folder: str, out_folder
         slice_list = [s for s in os.listdir(tile_path)]
 
         # cut and save all images of the tile through all dates
-        for slice_name in tqdm(slice_list, initial=1):
+        for slice_name in slice_list:
             slice_path = os.path.join(tile_path, slice_name)
             _cut_save_zip_slice(slice_path, outline_path, out_folder)
             logger.info(f"Slice {slice_name} cut and save")
@@ -108,7 +116,6 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
 
     # makedir to save the slice
     dir_slice_name = f"{sat}_{date}_{split_path[3]}"
-    logger.info(split_path[3])
     out = os.path.join(f"sortie{split_path[3]}", dir_slice_name)
     out = os.path.join(out_folder, out)
     os.makedirs(out, exist_ok=True)
@@ -168,4 +175,4 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
 
         # write in the logger if a mask is missing
         else:
-            logger.warning(f"They is no {name} in {slice_path}")
+            logger.info(f"They is no {name} in {slice_path}")
