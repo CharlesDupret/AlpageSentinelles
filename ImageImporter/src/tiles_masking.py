@@ -3,20 +3,43 @@ import numpy as np
 import rasterio
 
 
-def tiles_masking(cut_data_path: str, data_folder: str):
+def tiles_masking(zip_folder: str, data_folder: str) -> None:
+    """apply the cut_all_tile on all years
+
+    Parameters
+    ----------
+    zip_folder: folder where raw sentinel2 images are stored (decoupageZIP)
+    data_folder: where cut layer will be stored
+    """
+
+    year_list = os.listdir(zip_folder)
+
+    # loop through all years
+    for year in year_list:
+
+        # defined paths
+        cut_data_path = os.path.join(zip_folder, f"{year}/1_decoupageEmpriseZip/sortie")
+        save_folder = os.path.join(data_folder, year)
+
+        # cut and save Sentinel2 tiles by year
+        _tiles_masking_by_year(cut_data_path, save_folder)
+
+
+
+def _tiles_masking_by_year(cut_data_path: str, save_folder: str):
     """apply masks on all tiles of a year
 
     Parameters
     ----------
     cut_data_path: path to the import cut data
-    data_folder: path to the folder where tiles will be saved
+    save_folder: path to the folder where tiles will be saved
     """
 
     tile_list = os.listdir(cut_data_path)
 
     for tile in tile_list:
         tile_path = os.path.join(cut_data_path, tile)
-        saving_tile_folder = os.path.join(data_folder, tile)
+        saving_tile_folder = os.path.join(save_folder, tile)
         _apply_masks_on_tile(tile_path, saving_tile_folder)
 
 
@@ -85,4 +108,4 @@ def _apply_masks_on_slice(slice_path: str, saving_slice_folder: str) -> None:
         # write the masked band
         out_path = os.path.join(saving_slice_folder, band)
         with rasterio.open(out_path, "w", **profile) as out:
-            out.write(filtered_band)
+            out.write(filtered_band, 1)

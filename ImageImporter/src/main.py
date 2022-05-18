@@ -51,13 +51,14 @@ def main() -> None:
 
     # set folder
     zip_folder = "../data/decoupageZip"
+    cut_data_path = "../data/decoupageZip"
     data_folder = "../data"
 
     # cut and save Sentinel2 tiles
     tiles_cutting(zip_folder, data_folder)
 
     # apply cloud and snow mask on cut tiles
-    tiles_masking()
+    tiles_masking(zip_folder, data_folder)
 
     time_end = perf_counter()
 

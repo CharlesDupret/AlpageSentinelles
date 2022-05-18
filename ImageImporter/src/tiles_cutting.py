@@ -59,10 +59,10 @@ def tiles_cutting(zip_folder: str, data_folder: str) -> None:
         out_folder = os.path.join(data_folder, f"decoupageZip/{year}/1_decoupageEmpriseZip/sortie")
 
         # cut and save Sentinel2 tiles by year
-        cut_all_tile(zip_tile_folder, outline_folder, out_folder)
+        _tiles_cutting_by_year(zip_tile_folder, outline_folder, out_folder)
 
 
-def cut_all_tile(zip_tile_folder: str, outline_folder: str, out_folder: str) -> None:
+def _tiles_cutting_by_year(zip_tile_folder: str, outline_folder: str, out_folder: str) -> None:
     """cut and save all tile in a same year in the out_folder
 
     Parameters
