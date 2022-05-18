@@ -39,7 +39,7 @@ data
 │       └─── sortie
 │           └─── sortieTILE
 │               └─── TILES
-│                   └─── slices
+│                   └─── Slices
 │                       └─── Bands
 │                           "S2A_date_tile_B2"
 │                                    .
