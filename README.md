@@ -42,10 +42,10 @@ Executable are sored in bin/
 
 
 ## Glossary 
-  - `Tile` or `Tile Cube`: All data about a 100km by 100km (bands, time series, mask).
-  - `Slice`: A spectral images at one given time.
-  - `Layer`: One layer like a band or a mask of spectral image.
-  - `Bands`: One or several layers corresponding to spectral bands.
+  - `Tile` or `Tile Cube`: All data about the 100km by 100km area (bands, time series, mask).
+  - `Slice`: A spectral images at one a given date.
+  - `Layer`: A band or a mask of spectral image.
+  - `Bands`: One or several bands corresponding to a spectral image at one date.
   - `Mask`: Sentinel2 mask used to remove clouds and snow.
 
 ## Links
