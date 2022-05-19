@@ -96,12 +96,12 @@ def get_tile_folder() -> str:
     tile_folder = input(
         """
     Enter the path to the tiles folder:
-    (if nothing is specified, by default in "../data/applicationMasque/sortie")
+    (if nothing is specified, by default in "data/applicationMasqueFull/sortie")
     --> """
     )
 
     if tile_folder == "":
-        tile_folder = "../data/applicationMasque/sortie"
+        tile_folder = "data/applicationMasqueFull/sortie"
 
     return tile_folder
 
@@ -112,28 +112,29 @@ def get_tfe_folder() -> str:
     tfe_folder = input(
         """
     Enter the path to the TFE folder:
-    (if nothing is specified, by default in "../data/TFE")
+    (if nothing is specified, by default in "data/TFE")
     --> """
     )
 
     if tfe_folder == "":
-        tfe_folder = "../data/TFE"
+        tfe_folder = "data/TFE"
 
     return tfe_folder
 
 
+# TODO: standardize the output data. you only need to enter the "data" folder
 def get_dataset_folder() -> str:
     """ask the use to choose the folder where dataset datas will save"""
 
     dataset_folder = input(
         """
     Enter the path where datasets will saved:
-    (if nothing is specified, by default in "../data/dataset/raw_dataset")
+    (if nothing is specified, by default in "data/dataset/raw_dataset")
     --> """
     )
 
     if dataset_folder == "":
-        dataset_folder = "../data/dataset/raw_dataset"
+        dataset_folder = "data/dataset/raw_dataset"
 
     return dataset_folder
 
@@ -155,7 +156,7 @@ def set_folder() -> tuple:
 
     # set the dataset folder
     dataset_path = get_dataset_folder()
-    if not os.path.exists(tile_path):
+    if not os.path.exists(dataset_path):
         os.makedirs(dataset_path)
 
     return tile_path, tfe_path, dataset_path
@@ -184,6 +185,6 @@ def main() -> None:
 The script had successfully run!
 --------------------------------
 
-{os.path.split(__file__)[1]} was executed in {h} hours {m} minutes and {s} seconds
+{__name__} was executed in {h} hours {m} minutes and {s} seconds
         """
     )
