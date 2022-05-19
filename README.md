@@ -22,24 +22,31 @@ classification of mountain pasture characteristics from Sentinel-2 spectral imag
 
 ## Outline
 
-  1. [`DatasetBuilder`](DatasetBuilder): Build a dataset based on the ground truth establish by 
-[AlpageSentinelles](https://www.alpages-sentinelles.fr/). The associate executable script is `bin/dataset_builder.py`.
-  2. 
+  1. [`ImageImporter`](ImageImporter): Unzip and cut Sentinel2 Images and mask according area of interest around
+     alpine pasture.
 
-
+  2. [`DatasetBuilder`](DatasetBuilder): Build a dataset based on the ground truth establish by
+     [AlpageSentinelles](https://www.alpages-sentinelles.fr/).
+  
+     
 ### Structure of the project
 
-  - `data`: Contain the main dataset, you can also put all your local data like TFE.
-  - `doc`: reports and other project related documents
-  - `environement.yaml`: the developing environment
-  
+  - `data`: That folder contains datas used in this project. Some data are imported in GitHub like datasets. Other are
+just local.
 
-### Executables
+  - `doc`: Reports and other project related documents
 
-Executable are sored in bin/
+  - `environement.yaml`: the setting of developing environment used
 
-  - [`dataset_builder.py`](bin) is the script to build the dataset based on the ground truth
+  - `log`: All running logs will be generated in a **log** folder (not imported in GitHub)
 
+
+## About development
+
+Scripts are working, but consider that they are not that robust. Specifically about passing and error exceptions.
+
+If you want to continue or just helps in the development of this project please consider the `How to improve ?`
+section in README of each package.
 
 
 ## Links

@@ -54,7 +54,7 @@ def tiles_masking(zip_folder: str, data_folder: str) -> None:
     for year in tqdm(year_list, desc="Cut through year processing", initial=1):
         # defined paths
         cut_data_path = os.path.join(zip_folder, f"{year}/1_decoupageEmpriseZip/sortie")
-        save_folder = os.path.join(data_folder, f"applicationMasqueOUT/{year}")
+        save_folder = os.path.join(data_folder, f"applicationMasque/{year}")
 
         # cut and save Sentinel2 tiles by year
         _tiles_masking_by_year(cut_data_path, save_folder)

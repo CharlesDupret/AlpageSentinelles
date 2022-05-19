@@ -1,15 +1,11 @@
 # Data
 
-
-***
-
-
 ## What is it?
 
 The **Data** folder contain the data witch used in this project. Some data are imported in GitHub like datasets. Other
 are just local.
 
-By default, all scripts will save datas with the following `Data organisation`. But you can also specify where you want 
+By default, all scripts will save datas with the following **data organisation**. But you can also specify where you want 
 saved outs.
 
 

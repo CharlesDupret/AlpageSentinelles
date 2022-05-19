@@ -96,12 +96,12 @@ def get_tile_folder() -> str:
     tile_folder = input(
         """
     Enter the path to the tiles folder:
-    (if nothing is specified, by default in "../data/applicationMasque/sortie")
+    (if nothing is specified, by default in "data/applicationMasqueFull/sortie")
     --> """
     )
 
     if tile_folder == "":
-        tile_folder = "../data/applicationMasque/sortie"
+        tile_folder = "data/applicationMasqueFull/sortie"
 
     return tile_folder
 
@@ -112,12 +112,12 @@ def get_tfe_folder() -> str:
     tfe_folder = input(
         """
     Enter the path to the TFE folder:
-    (if nothing is specified, by default in "../data/TFE")
+    (if nothing is specified, by default in "data/TFE")
     --> """
     )
 
     if tfe_folder == "":
-        tfe_folder = "../data/TFE"
+        tfe_folder = "data/TFE"
 
     return tfe_folder
 
@@ -129,12 +129,12 @@ def get_dataset_folder() -> str:
     dataset_folder = input(
         """
     Enter the path where datasets will saved:
-    (if nothing is specified, by default in "../data/dataset/raw_dataset")
+    (if nothing is specified, by default in "data/dataset/raw_dataset")
     --> """
     )
 
     if dataset_folder == "":
-        dataset_folder = "../data/dataset/raw_dataset"
+        dataset_folder = "data/dataset/raw_dataset"
 
     return dataset_folder
 

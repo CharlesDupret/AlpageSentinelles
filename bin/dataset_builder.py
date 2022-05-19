@@ -1,3 +1,0 @@
-import DatasetBuilder
-
-DatasetBuilder.main()
