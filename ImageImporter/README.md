@@ -1,4 +1,4 @@
-# Dataset-Builder
+# Image Importer
 
 ## What is it?
 
@@ -12,24 +12,21 @@ based on Sentinel2 images .tiff and a .sch file as ground truth.
   - run in you terminal:
 
 ```Language
-~/AlpageSentinelle python3 -m DatasetBuilder
+~/AlpageSentinelle python3 -m ImageImpoter
 ```
 
-  - give the path to the sentinel images and the TFE (by default in data/)
+  - give the path to the sentinel2 raw_data and the TFE (by default in data/)
 
   - logs of your run will be generated in [log/](log)
 
-  - datasets will be saved by default un [data/dataset/raw_dataset](../data/dataset/raw_dataset)
+  - datasets will be saved by default un [data/applicationMasque](../data/applicationMasque)
 
 
 ## Dependencies
 
   - numpy
-  - geopandas
-  - pandas
-  - xarray
   - GDAL
-  - scipy
+  - rasterio
 
 To install dependencies run in you terminal:
 
@@ -44,7 +41,4 @@ below:
 pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version
 ```
 
-
 ## How to improve ?
-
-

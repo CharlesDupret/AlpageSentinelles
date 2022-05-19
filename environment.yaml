@@ -5,6 +5,7 @@ dependencies:
   # required
   - pip
   - tqdm
+  - zipfile
   - numpy>=1.21.5
   - matplotlib>=3.2.2
   - geopandas>=0.10.2
@@ -12,6 +13,7 @@ dependencies:
   - xarray>=0.18.2
   - GDAL>=3.0.4   # pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version`
   - scipy>=1.8.0  # cannot read or write netCDF files without scipy installed
+  - rasterio
 
   # code check
   - black>=7.1.2
