@@ -9,6 +9,7 @@ based on Sentinel2 images .tiff and a .sch file as ground truth.
 ## How To Use
 
   - make sure that you have all **dependence**
+
   - run in you terminal:
 
 ```Language
@@ -17,9 +18,10 @@ based on Sentinel2 images .tiff and a .sch file as ground truth.
 
   - give the path to the sentinel2 raw_data and the TFE (by default in data/)
 
-  - logs of your run will be generated in [log/](log)
+  - logs of your run will be generated in [log](log)
 
-  - datasets will be saved by default un [data/applicationMasque](../data/applicationMasque)
+  - Slices will be saved by default in [data/applicationMasque](../data/applicationMasque). The data organisation is 
+describe in [data](../data).
 
 
 ## Dependencies
@@ -41,4 +43,9 @@ below:
 pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version
 ```
 
+
 ## How to improve ?
+
+  - Improve passing
+  - Add exceptions and errors messages.
+  - Improve logs to better now what is done or missing (like snow mask)
