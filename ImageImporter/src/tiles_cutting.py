@@ -3,7 +3,6 @@ from zipfile import ZipFile  # provides tools to handling ZIP file
 import gdal  # GDAL for manipulating geospatial raster data
 import logging  # a logger
 
-import numpy as np
 from tqdm import tqdm  # a progress bar
 
 # logger configuration
@@ -36,27 +35,35 @@ logger.addHandler(file_handler)
 # stream log
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(stream_formatter)
-stream_handler.setLevel(logging.WARNING)
+stream_handler.setLevel(logging.INFO)
 logger.addHandler(stream_handler)
 
 
-# TODO: finish this function
-def _get_snow_mask_path(slice_name: str, snow_mask_list: list) -> str:
+def _get_snow_mask_path(slice_name: str, snow_mask_tile_folder: str) -> str:
     """get the path to the snow mask associated to the slice
 
     Parameters
     ----------
         slice_name: the slice name
-        snow_mask_list: the list of all snow mask of slices of the year
+        snow_mask_tile_folder: folder of snow masks of the tile
 
     Returns
     -------
         snow_mask_path: the path to the right snow mask
     """
 
-    snow_mask_path = None
+    # list of snow masks .zip
+    snow_mask_list = os.listdir(snow_mask_tile_folder)
 
-    return snow_mask_path
+    # find the  snow mask .zip corresponding to the slice
+    snow_mask = [path for path in snow_mask_list if path[11:19] == slice_name[11:19]]
+
+    if snow_mask:
+        # build and return the path
+        return os.path.join(snow_mask_tile_folder, snow_mask[0])
+
+    else:
+        logger.info(f"No snow mask found corresponding to {slice_name}")
 
 
 def tiles_cutting(raw_folder: str, data_folder: str) -> None:
@@ -108,19 +115,19 @@ def _tiles_cutting_by_year(
         # make the list of all image taken in the year
         slice_list = [s for s in os.listdir(tile_path)]
 
-        # snow masks of the tile
-        snow_mask_list = os.listdir(f"snow_mask_folder/{tile}")
+        # snow masks folder of the tile
+        snow_mask_tile_folder = f"{snow_mask_folder}/{tile}"
 
         # cut and save all slices of the tile through all dates
         for slice_name in slice_list:
 
-            # defined the path associated to the slice
+            # defined the paths associated to the slice
             slice_path = os.path.join(tile_path, slice_name)
-            snow_mask_path = _get_snow_mask_path(slice_name, snow_mask_list)
+            snow_mask_path = _get_snow_mask_path(slice_name, snow_mask_tile_folder)
 
             # cut and save the slice
             _cut_save_zip_slice(slice_path, snow_mask_path, stencil_path, year_out_folder)
-            logger.info(f"Slice {slice_name} cut and save")
+        logger.info(f"--> Tile {tile} cut and save")
 
 
 def _cut_save_zip_slice(slice_path: str, snow_mask_path: str, stencil_path: str, year_out_folder: str) -> None:
@@ -141,7 +148,7 @@ def _cut_save_zip_slice(slice_path: str, snow_mask_path: str, stencil_path: str,
 
     # makedir to save the slice
     dir_slice_name = f"{sat}_{date}_{split_path[3]}"
-    slice_out_folder = f"{year_out_folder}/{tile_name}/{dir_slice_name})"
+    slice_out_folder = f"{year_out_folder}/{tile_name}/{dir_slice_name}"
     os.makedirs(slice_out_folder, exist_ok=True)
 
     # read what files are in the .zip
@@ -155,8 +162,9 @@ def _cut_save_zip_slice(slice_path: str, snow_mask_path: str, stencil_path: str,
     layer_dict = {"bands": band_list, "cloud_mask": cloud_mask}
 
     # add snow mask in layer dict
-    with ZipFile(snow_mask_path, "r") as z:
-        layer_dict["snow_mask"] = [f for f in z.namelist() if ("SNW" in f) and ".tif" in f]
+    if snow_mask_path:
+        with ZipFile(snow_mask_path, "r") as z:
+            layer_dict["snow_mask"] = [f for f in z.namelist() if ("SNW" in f) and ".tif" in f]
 
     # loop through bands and masks
     for name, layer_list in layer_dict.items():

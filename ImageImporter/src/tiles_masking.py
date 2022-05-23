@@ -39,12 +39,11 @@ stream_handler.setLevel(logging.INFO)
 logger.addHandler(stream_handler)
 
 
-def tiles_masking(raw_folder: str, data_folder: str) -> None:
+def tiles_masking(data_folder: str) -> None:
     """apply the cut_all_tile on all years
 
     Parameters
     ----------
-    raw_folder: folder where raw sentinel2 images are stored (decoupageZIP)
     data_folder: where cut layer will be stored
     """
 

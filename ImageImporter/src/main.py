@@ -132,7 +132,7 @@ def image_importer(raw_folder: str, data_folder: str) -> None:
     )
 
     # apply cloud and snow mask on cut tiles
-    tiles_masking(raw_folder, data_folder)
+    tiles_masking(data_folder)
 
 
 def main() -> None:

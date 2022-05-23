@@ -122,7 +122,6 @@ def get_tfe_folder() -> str:
     return tfe_folder
 
 
-# TODO: standardize the output data. you only need to enter the "data" folder
 def get_dataset_folder() -> str:
     """ask the use to choose the folder where dataset datas will save"""
 
