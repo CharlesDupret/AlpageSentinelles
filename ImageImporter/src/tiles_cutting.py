@@ -78,7 +78,7 @@ def tiles_cutting(raw_folder: str, data_folder: str) -> None:
     year_list = [y for y in os.listdir(raw_folder) if y[:2] == "20"]
 
     # loop through all years
-    for year in tqdm(year_list, desc="Cut through year processing", initial=1):
+    for year in tqdm(year_list, desc="Cutting of data through years: ", initial=1):
         # defined paths
         stencil_folder = f"{raw_folder}/{year}/emprise"
         zip_tile_folder = f"{raw_folder}/{year}/archive_zip"

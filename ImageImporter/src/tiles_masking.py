@@ -50,7 +50,7 @@ def tiles_masking(data_folder: str) -> None:
     year_list = os.listdir(f"{data_folder}/1_decoupageEmpriseZip")
 
     # loop through all years
-    for year in tqdm(year_list, desc="Cut through year processing", initial=1):
+    for year in tqdm(year_list, desc="Application of masks through the years: ", initial=1):
         # defined paths
         cut_data_path = os.path.join(data_folder, f"1_decoupageEmpriseZip/{year}")
         save_folder = os.path.join(data_folder, f"2_applicationMasque/{year}")
