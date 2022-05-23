@@ -40,13 +40,32 @@ stream_handler.setLevel(logging.WARNING)
 logger.addHandler(stream_handler)
 
 
+# TODO: finish this function
+def _get_snow_mask_path(slice_name: str, snow_mask_list: list) -> str:
+    """get the path to the snow mask associated to the slice
+
+    Parameters
+    ----------
+        slice_name: the slice name
+        snow_mask_list: the list of all snow mask of slices of the year
+
+    Returns
+    -------
+        snow_mask_path: the path to the right snow mask
+    """
+
+    snow_mask_path = None
+
+    return snow_mask_path
+
+
 def tiles_cutting(raw_folder: str, data_folder: str) -> None:
     """apply the cut_all_tile on all years
 
     Parameters
     ----------
-    raw_folder: where raw datas, stencils and masks are stored
-    data_folder: where cut layer will be stored
+        raw_folder: where raw datas, stencils and masks are stored
+        data_folder: where cut layer will be stored
     """
 
     year_list = [y for y in os.listdir(raw_folder) if y[:2] == "20"]
@@ -54,35 +73,32 @@ def tiles_cutting(raw_folder: str, data_folder: str) -> None:
     # loop through all years
     for year in tqdm(year_list, desc="Cut through year processing", initial=1):
         # defined paths
-        stencil_folder = os.path.join(
-            raw_folder, f"{year}/emprise"
-        )
-        zip_tile_folder = os.path.join(
-            raw_folder, f"{year}/archive_zip"
-        )
-        out_folder = os.path.join(
-            data_folder, f"1_decoupageEmpriseZip/{year}"
-        )
+        stencil_folder = f"{raw_folder}/{year}/emprise"
+        zip_tile_folder = f"{raw_folder}/{year}/archive_zip"
+        snow_mask_folder = f"{raw_folder}/{year}/archive_zip_snow"
+
+        year_out_folder = f"{data_folder}/1_decoupageEmpriseZip/{year}"
 
         # cut and save Sentinel2 tiles by year
-        _tiles_cutting_by_year(zip_tile_folder, stencil_folder, out_folder)
+        _tiles_cutting_by_year(zip_tile_folder, stencil_folder, snow_mask_folder, year_out_folder)
 
 
 def _tiles_cutting_by_year(
-    zip_tile_folder: str, stencil_folder: str, out_folder: str
+        zip_tile_folder: str, stencil_folder: str, snow_mask_folder: str, year_out_folder: str
 ) -> None:
     """cut and save all tile in a same year in the out_folder
 
     Parameters
     ----------
-    zip_tile_folder: folder containing all tile of a year in a .zip format
-    stencil_folder: folder containing stencil of interest in .gpkg format
-    out_folder: folder where cut tiles will be saved
+        zip_tile_folder: folder containing all tile of a year in a .zip format
+        stencil_folder: folder containing stencil of interest in .gpkg format
+        snow_mask_folder: folder containing snow masks
+        year_out_folder: folder where cut tiles will be saved
     """
 
     # list images
-    stencil_list = [stencil for stencil in os.listdir(stencil_folder)]
-    tiles_list = [name for name in os.listdir(zip_tile_folder)]
+    stencil_list = os.listdir(stencil_folder)
+    tiles_list = os.listdir(zip_tile_folder)
 
     # loop through all tiles in a same year
     for tile, stencil in zip(tiles_list, stencil_list):
@@ -92,21 +108,29 @@ def _tiles_cutting_by_year(
         # make the list of all image taken in the year
         slice_list = [s for s in os.listdir(tile_path)]
 
+        # snow masks of the tile
+        snow_mask_list = os.listdir(f"snow_mask_folder/{tile}")
+
         # cut and save all slices of the tile through all dates
         for slice_name in slice_list:
+
+            # defined the path associated to the slice
             slice_path = os.path.join(tile_path, slice_name)
-            _cut_save_zip_slice(slice_path, stencil_path, out_folder)
+            snow_mask_path = _get_snow_mask_path(slice_name, snow_mask_list)
+
+            # cut and save the slice
+            _cut_save_zip_slice(slice_path, snow_mask_path, stencil_path, year_out_folder)
             logger.info(f"Slice {slice_name} cut and save")
 
 
-def _cut_save_zip_slice(slice_path: str, stencil_path: str, out_folder: str) -> None:
+def _cut_save_zip_slice(slice_path: str, snow_mask_path: str, stencil_path: str, year_out_folder: str) -> None:
     """cut and save all bands and mask of a tile ate one date
 
     Parameters
     ----------
-    slice_path: path to the .zip containing the bands
-    stencil_path: path to the associated outline of interest in .gpkg format
-    out_folder: folder where cut tiles will be saved
+        slice_path: path to the .zip containing the bands
+        stencil_path: path to the associated outline of interest in .gpkg format
+        year_out_folder: folder where cut tiles will be saved
     """
 
     # set name of the cut slice
@@ -117,9 +141,8 @@ def _cut_save_zip_slice(slice_path: str, stencil_path: str, out_folder: str) -> 
 
     # makedir to save the slice
     dir_slice_name = f"{sat}_{date}_{split_path[3]}"
-    out = os.path.join(tile_name, dir_slice_name)
-    out = os.path.join(out_folder, out)
-    os.makedirs(out, exist_ok=True)
+    slice_out_folder = f"{year_out_folder}/{tile_name}/{dir_slice_name})"
+    os.makedirs(slice_out_folder, exist_ok=True)
 
     # read what files are in the .zip
     with ZipFile(slice_path, "r") as z:
@@ -127,10 +150,13 @@ def _cut_save_zip_slice(slice_path: str, stencil_path: str, out_folder: str) -> 
 
     # make a dict of files to keep
     band_list = [f for f in zip_list if "FRE" in f]
-    snow_mask = [f for f in zip_list if ("EXS" in f or "SNW" in f) and ".tif" in f]
     cloud_mask = [f for f in zip_list if "CLM" in f and "R1" in f]
 
-    layer_dict = {"bands": band_list, "snow_mask": snow_mask, "cloud_mask": cloud_mask}
+    layer_dict = {"bands": band_list, "cloud_mask": cloud_mask}
+
+    # add snow mask in layer dict
+    with ZipFile(snow_mask_path, "r") as z:
+        layer_dict["snow_mask"] = [f for f in z.namelist() if ("SNW" in f) and ".tif" in f]
 
     # loop through bands and masks
     for name, layer_list in layer_dict.items():
@@ -146,18 +172,18 @@ def _cut_save_zip_slice(slice_path: str, stencil_path: str, out_folder: str) -> 
                     no_data = -1000
 
                 elif name == "snow_mask":
-                    layer_name = "SNW"
+                    layer_name = "SNW_R2"
                     no_data = 0
 
                 else:
-                    layer_name = layer[-10:-4]
+                    layer_name = "CLM_R1"
                     no_data = 0
 
-                layer_path = os.path.join(out, f"{dir_slice_name}_{layer_name}")
+                layer_out_path = os.path.join(slice_out_folder, f"{dir_slice_name}_{layer_name}")
 
                 # cutting .zip layer
                 sortieTif = gdal.Warp(
-                    layer_path,
+                    layer_out_path,
                     f"/vsizip/{slice_path}/{layer}",  # we use the vsizip protocol
                     creationOptions=[
                         "COMPRESS=LZW",

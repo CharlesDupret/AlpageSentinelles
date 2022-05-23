@@ -39,22 +39,22 @@ stream_handler.setLevel(logging.INFO)
 logger.addHandler(stream_handler)
 
 
-def tiles_masking(zip_folder: str, data_folder: str) -> None:
+def tiles_masking(raw_folder: str, data_folder: str) -> None:
     """apply the cut_all_tile on all years
 
     Parameters
     ----------
-    zip_folder: folder where raw sentinel2 images are stored (decoupageZIP)
+    raw_folder: folder where raw sentinel2 images are stored (decoupageZIP)
     data_folder: where cut layer will be stored
     """
 
-    year_list = os.listdir(zip_folder)
+    year_list = os.listdir(f"{data_folder}/1_decoupageEmpriseZip")
 
     # loop through all years
     for year in tqdm(year_list, desc="Cut through year processing", initial=1):
         # defined paths
-        cut_data_path = os.path.join(zip_folder, f"{year}/1_decoupageEmpriseZip/sortie")
-        save_folder = os.path.join(data_folder, f"applicationMasque/{year}")
+        cut_data_path = os.path.join(data_folder, f"1_decoupageEmpriseZip/{year}")
+        save_folder = os.path.join(data_folder, f"2_applicationMasque/{year}")
 
         # cut and save Sentinel2 tiles by year
         _tiles_masking_by_year(cut_data_path, save_folder)
