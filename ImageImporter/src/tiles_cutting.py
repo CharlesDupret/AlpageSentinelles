@@ -40,72 +40,72 @@ stream_handler.setLevel(logging.WARNING)
 logger.addHandler(stream_handler)
 
 
-def tiles_cutting(zip_folder: str, data_folder: str) -> None:
+def tiles_cutting(raw_folder: str, data_folder: str) -> None:
     """apply the cut_all_tile on all years
 
     Parameters
     ----------
-    zip_folder: folder where raw sentinel2 images are stored (decoupageZIP)
+    raw_folder: where raw datas, stencils and masks are stored
     data_folder: where cut layer will be stored
     """
 
-    year_list = os.listdir(zip_folder)
+    year_list = [y for y in os.listdir(raw_folder) if y[:2] == "20"]
 
     # loop through all years
     for year in tqdm(year_list, desc="Cut through year processing", initial=1):
         # defined paths
-        outline_folder = os.path.join(
-            zip_folder, f"{year}/1_decoupageEmpriseZip/emprise"
+        stencil_folder = os.path.join(
+            raw_folder, f"{year}/emprise"
         )
         zip_tile_folder = os.path.join(
-            zip_folder, f"{year}/1_decoupageEmpriseZip/archive_zip"
+            raw_folder, f"{year}/archive_zip"
         )
         out_folder = os.path.join(
-            data_folder, f"decoupageZip/{year}/1_decoupageEmpriseZip/sortie"
+            data_folder, f"1_decoupageEmpriseZip/{year}"
         )
 
         # cut and save Sentinel2 tiles by year
-        _tiles_cutting_by_year(zip_tile_folder, outline_folder, out_folder)
+        _tiles_cutting_by_year(zip_tile_folder, stencil_folder, out_folder)
 
 
 def _tiles_cutting_by_year(
-    zip_tile_folder: str, outline_folder: str, out_folder: str
+    zip_tile_folder: str, stencil_folder: str, out_folder: str
 ) -> None:
     """cut and save all tile in a same year in the out_folder
 
     Parameters
     ----------
     zip_tile_folder: folder containing all tile of a year in a .zip format
-    outline_folder: folder containing outline of interest in .gpkg format
+    stencil_folder: folder containing stencil of interest in .gpkg format
     out_folder: folder where cut tiles will be saved
     """
 
     # list images
-    outline_list = [outline for outline in os.listdir(outline_folder)]
+    stencil_list = [stencil for stencil in os.listdir(stencil_folder)]
     tiles_list = [name for name in os.listdir(zip_tile_folder)]
 
     # loop through all tiles in a same year
-    for tile, outline in zip(tiles_list, outline_list):
+    for tile, stencil in zip(tiles_list, stencil_list):
         tile_path = os.path.join(zip_tile_folder, tile)
-        outline_path = os.path.join(outline_folder, outline)
+        stencil_path = os.path.join(stencil_folder, stencil)
 
         # make the list of all image taken in the year
         slice_list = [s for s in os.listdir(tile_path)]
 
-        # cut and save all images of the tile through all dates
+        # cut and save all slices of the tile through all dates
         for slice_name in slice_list:
             slice_path = os.path.join(tile_path, slice_name)
-            _cut_save_zip_slice(slice_path, outline_path, out_folder)
+            _cut_save_zip_slice(slice_path, stencil_path, out_folder)
             logger.info(f"Slice {slice_name} cut and save")
 
 
-def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> None:
+def _cut_save_zip_slice(slice_path: str, stencil_path: str, out_folder: str) -> None:
     """cut and save all bands and mask of a tile ate one date
 
     Parameters
     ----------
     slice_path: path to the .zip containing the bands
-    outline_path: path to the associated outline of interest in .gpkg format
+    stencil_path: path to the associated outline of interest in .gpkg format
     out_folder: folder where cut tiles will be saved
     """
 
@@ -113,10 +113,11 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
     split_path = os.path.basename(slice_path).split("_")
     sat = split_path[0].replace("SENTINEL", "S")
     date = split_path[1].split("-")[0]
+    tile_name = split_path[3]
 
     # makedir to save the slice
     dir_slice_name = f"{sat}_{date}_{split_path[3]}"
-    out = os.path.join(f"sortie{split_path[3]}", dir_slice_name)
+    out = os.path.join(tile_name, dir_slice_name)
     out = os.path.join(out_folder, out)
     os.makedirs(out, exist_ok=True)
 
@@ -162,7 +163,7 @@ def _cut_save_zip_slice(slice_path: str, outline_path: str, out_folder: str) -> 
                         "COMPRESS=LZW",
                         "PREDICTOR=2",
                     ],
-                    cutlineDSName=outline_path,  # outline
+                    cutlineDSName=stencil_path,  # stencil
                     dstNodata=no_data,  # nodata value -10000
                     xRes=10,  # x output resolution
                     yRes=-10,  # y output resolution

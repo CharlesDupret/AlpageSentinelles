@@ -41,45 +41,29 @@ stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
 
 
-def get_zip_folder() -> str:
-    """ask the use to choose the folder where decoupageZIP datas are stored"""
+def get_raw_folder() -> str:
+    """ask to choose where raw datas, stencils and masks are stored"""
 
-    zip_folder = input(
+    raw_folder = input(
         """
-    Enter the path where datasets will saved:
-    (if nothing is specified, by default in "data/decoupageZip")
+    Enter the path where raw datas, stencils and masks are stored:
+    (if nothing is specified, by default in "E:/")
     --> """
     )
 
-    if zip_folder == "":
-        zip_folder = "data/decoupageZip"
+    if raw_folder == "":
+        raw_folder = "E:/"
 
-    return zip_folder
-
-
-def get_cut_data_folder() -> str:
-    """ask the use to choose the folder where decoupageZIP datas are stored"""
-
-    cut_data_folder = input(
-        """
-    Enter the path where datasets will saved:
-    (if nothing is specified, by default in "data/decoupageZip")
-    --> """
-    )
-
-    if cut_data_folder == "":
-        cut_data_folder = "data/decoupageZip"
-
-    return cut_data_folder
+    return raw_folder
 
 
 def get_data_folder() -> str:
-    """ask the use to choose the folder where decoupageZIP datas are stored"""
+    """ask to choose the folder where decoupageZIP datas are stored"""
 
     data_folder = input(
         """
-    Enter the path where datasets will saved:
-    (if nothing is specified, by default in "data")
+    Enter the path where out datas will be saved:
+    (if nothing is specified, by default in "~/AlpageSentinelles/data")
     --> """
     )
 
@@ -92,34 +76,27 @@ def get_data_folder() -> str:
 def set_folder() -> tuple:
     """defined where tiles data and TFE are, and where the datasets will save"""
 
-    # set where tile are stored
-    zip_folder = get_zip_folder()
-    while not os.path.exists(zip_folder):
-        logger.warning(f"'{zip_folder}' is not a path. Please enter a valid path.")
-        zip_folder = get_zip_folder()
+    # set where raw datas, stencils and masks are stored
+    raw_folder = get_raw_folder()
+    while not os.path.exists(raw_folder):
+        logger.warning(f"'{raw_folder}' is not a path. Please enter a valid path.")
+        raw_folder = get_raw_folder()
 
-    # set where TFE are stored
-    cut_data_folder = get_cut_data_folder()
-    while not os.path.exists(cut_data_folder):
-        logger.warning(f"'{cut_data_folder}' is not a path. Please enter a valid path.")
-        cut_data_folder = get_cut_data_folder()
-
-    # set the dataset folder
+    # set the out folder
     data_folder = get_data_folder()
-    if not os.path.exists(zip_folder):
+    if not os.path.exists(raw_folder):
         os.makedirs(data_folder)
 
-    return zip_folder, cut_data_folder, data_folder
+    return raw_folder, data_folder
 
 
-def image_importer(zip_folder: str, cut_data_folder: str, data_folder: str) -> None:
+def image_importer(raw_folder: str, data_folder: str) -> None:
     """run both tiles_cutting and tiles_masking
 
     Parameters
     ----------
-    zip_folder:
-    cut_data_folder:
-    data_folder:
+    raw_folder: where raw datas, stencils and masks are stored
+    data_folder: out folder
     """
 
     logger.info(
@@ -128,13 +105,10 @@ def image_importer(zip_folder: str, cut_data_folder: str, data_folder: str) -> N
             # The script to cut and mask raw img has been launched! #
             #=======================================================#
 
-                The ZIP data given are stored in:
-                    {zip_folder}
+                The raw datas, stencils and masks folder given is:
+                    {raw_folder}
 
-                The cut layer given are on TFE files stored in:
-                    {cut_data_folder}
-
-                Dataset will stored as netCDF4 files in:
+                Out datas will be stored in:
                     {data_folder}
 
             """
@@ -148,7 +122,7 @@ def image_importer(zip_folder: str, cut_data_folder: str, data_folder: str) -> N
     )
 
     # cut and save Sentinel2 tiles
-    tiles_cutting(zip_folder, data_folder)
+    tiles_cutting(raw_folder, data_folder)
 
     logger.info(
         """
@@ -158,7 +132,7 @@ def image_importer(zip_folder: str, cut_data_folder: str, data_folder: str) -> N
     )
 
     # apply cloud and snow mask on cut tiles
-    tiles_masking(cut_data_folder, data_folder)
+    tiles_masking(raw_folder, data_folder)
 
 
 def main() -> None:
@@ -167,10 +141,10 @@ def main() -> None:
     time_start = perf_counter()
 
     # set folder
-    zip_folder, cut_data_folder, data_folder = set_folder()
+    raw_folder, data_folder = set_folder()
 
     # cut and apply masks on raw images
-    image_importer(zip_folder, cut_data_folder, data_folder)
+    image_importer(raw_folder, data_folder)
 
     time_end = perf_counter()
 

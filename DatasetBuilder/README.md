@@ -17,7 +17,7 @@ based on Sentinel2 images .tiff and a .sch file as ground truth.
 
   - give the path to the sentinel images and the TFE (by default in data/)
 
-  - logs of your run will be generated in [log/](log)
+  - logs of your run will be generated in [log](log)
 
   - datasets will be saved by default un [data/dataset/raw_dataset](../data/dataset/raw_dataset)
 

@@ -48,4 +48,4 @@ pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL
 
   - Improve passing
   - Add exceptions and errors messages.
-  - Improve logs to better now what is done or missing (like snow mask)
+  - Improve logs to better know what is done or missing (like snow mask)
