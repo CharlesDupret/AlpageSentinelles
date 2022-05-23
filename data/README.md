@@ -13,34 +13,29 @@ saved outs.
 
 ```
 data
-│   README.md
 │
-└─── decoupageZIP
-│   └─── 2021
-│       └─── 1_decoupageEmpriseZip
-│          └─── sortie
-│              └─── sortieTILE
-│                 └─── TILES
-│                     └─── Slices "S2A_date_tile"
-│                         └─── Layers
-│                            "S2A_date_tile_B2"
-│                                     .
-│                                     .
-│                            "S2A_date_tile_B12"
-│                            "S2A_date_tile_mask"
+└───  README.md
+│
+└─── 1_decoupageEmpriseZip
+│   └─── Year
+│       └─── TILE
+│           └─── Slices
+│                   "S2A_date_tile_B2.tif"
+│                           .
+│                           .
+│                   "S2A_date_tile_B12.tif"
+│                   "S2A_date_tile_mask.tif"
 │
 │
-└─── applicationMasque
-│   └─── 2021
-│       └─── sortie
-│           └─── sortieTILE
-│               └─── TILES
-│                   └─── Slices
-│                       └─── Bands
-│                           "S2A_date_tile_B2"
-│                                    .
-│                                    .
-│                           "S2A_date_tile_B12" 
+└─── 2_applicationMasque
+│   └─── Year
+│       └─── TILE
+│           └─── Slices
+│                   "S2A_date_tile_B2.tif"
+│                           .
+│                           .
+│                   "S2A_date_tile_B12.tif"
+│
 └─── dataset
     └─── raw_dataset
     │   raw_dataset.nc
