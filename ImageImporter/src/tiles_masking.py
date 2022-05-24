@@ -141,8 +141,8 @@ def _apply_masks_on_slice(slice_path: str, saving_slice_folder: str) -> None:
 
         # band filtering
         filtered_band = band_val.astype(np.float64)
+        filtered_band = np.where(master_mask == 0, band_val, np.nan)
         filtered_band /= 10000
-        filtered_band = np.where(master_mask == 0, np.nan, band_val)
 
         # write the masked band
         out_path = os.path.join(saving_slice_folder, band)

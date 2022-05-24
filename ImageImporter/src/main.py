@@ -2,11 +2,9 @@ import os  # Portable way of using operating system dependent functionality
 from time import perf_counter  # to calculate the computation time
 import logging  # a logger
 
-
 # My imports
 from ImageImporter.src.tiles_cutting import tiles_cutting
 from ImageImporter.src.tiles_masking import tiles_masking
-
 
 # logger configuration
 DIR = "log/"
@@ -114,25 +112,37 @@ def image_importer(raw_folder: str, data_folder: str) -> None:
             """
     )
 
-    logger.info(
+    cutting = input("--> Cut and save Sentinel2 tiles (Y/n)")
+    masking = input("--> apply cloud and snow mask on cut tiles (Y/n)")
+
+    if cutting == 'Y':
+
+        logger.info(
+            """
+        Cutting raw_images and mask...
+        ------------------------------
         """
-    Cutting raw_images and mask...
-    ------------------------------
-    """
-    )
+        )
 
-    # cut and save Sentinel2 tiles
-    tiles_cutting(raw_folder, data_folder)
+        # cut and save Sentinel2 tiles
+        tiles_cutting(raw_folder, data_folder)
 
-    logger.info(
+    else:
+        logger.info("/!\ The cutting has been skipped")
+
+    if masking == 'Y':
+
+        logger.info(
+            """
+        Applying masks on cut images...
+        -------------------------------------
         """
-    Applying masks on cut images...
-    -------------------------------------
-    """
-    )
+        )
+        # apply cloud and snow mask on cut tiles
+        tiles_masking(data_folder)
 
-    # apply cloud and snow mask on cut tiles
-    tiles_masking(data_folder)
+    else:
+        logger.info("/!\ The masking has been skipped")
 
 
 def main() -> None:
