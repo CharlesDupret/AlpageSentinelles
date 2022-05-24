@@ -144,7 +144,7 @@ def _input_years(tile_folder: str) -> list:
     while not validate:
         input_year = input("(year/all/ok): ")
 
-        if ("all" == input_year) or ('*' == input_year):
+        if ("all" == input_year) or ("*" == input_year):
             return years_list
 
         elif input_year in years_list:
@@ -154,7 +154,9 @@ def _input_years(tile_folder: str) -> list:
             if selected_years:
                 validate = True
             else:
-                logger.info(f"You must select at least one year among [{' '.join(years_list)}]")
+                logger.info(
+                    f"You must select at least one year among [{' '.join(years_list)}]"
+                )
 
         else:
             logger.info(f"Sorry '{input_year}' is not in [{' '.join(years_list)}]\n")
@@ -188,13 +190,15 @@ def _get_years_selection(tile_folder) -> list:
     while not validate:
         selected_years = _input_years(tile_folder)
 
-        while (validate != 'Y') and (validate != 'n'):
-            validate = input(f"\nConfirm that you want to import [{' '.join(selected_years)}] (Y/n): ")
+        while (validate != "Y") and (validate != "n"):
+            validate = input(
+                f"\nConfirm that you want to build a dataset with [{' '.join(selected_years)}] (Y/n): "
+            )
 
-        if 'Y' == validate:
+        if "Y" == validate:
             validate = True
 
-        if 'n' == validate:
+        if "n" == validate:
             validate = False
 
         # juste for print design

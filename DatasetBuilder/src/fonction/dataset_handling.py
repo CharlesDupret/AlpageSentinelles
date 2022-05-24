@@ -50,7 +50,9 @@ def building_and_save_dataset(year_dict: dict, dataset_folder) -> None:
         _building_and_save_dataset_by_year(TileCube_dict, year_dataset_folder, year)
 
 
-def _building_and_save_dataset_by_year(TileCube_dict: dict, year_dataset_folder: str, year: str) -> None:
+def _building_and_save_dataset_by_year(
+    TileCube_dict: dict, year_dataset_folder: str, year: str
+) -> None:
     """
     Parameters
     ----------
@@ -87,7 +89,9 @@ def merge_dataset(dataset_folder: str) -> None:
     """
 
     merged_dataset_path = []
-    year_list = os.listdir(dataset_folder)
+
+    # TODO: this is a poor parsing... upgrade it !
+    year_list = [y for y in os.listdir(dataset_folder) if len(y) == 4]
 
     # loop over all years
     for year in year_list:
