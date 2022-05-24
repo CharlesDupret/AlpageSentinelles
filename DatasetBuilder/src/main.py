@@ -128,34 +128,44 @@ def _input_years(tile_folder: str) -> list:
     years_list = os.listdir(tile_folder)
 
     logger.info(
-        f"""The lies datas folder contain those years: 
-        {years_list}
         """
+    Select years to import
+    ---------------------
+    """
     )
 
+    logger.info(f"The data folder contain those years: {' '.join(years_list)}")
+
     logger.info(
-        "Input all years you want imported to the dataset or ok when your have finished (year/all/ok):"
+        "Input all years that you want to import to the dataset. Tap 'ok' when your have finished:\n"
     )
 
     validate = False
     while not validate:
-        input_year = input("--> ")
+        input_year = input("(year/all/ok): ")
 
-        if "all" == input_year:
+        if ("all" == input_year) or ('*' == input_year):
             return years_list
 
         elif input_year in years_list:
-            selected_years.apend(input_year)
+            selected_years.append(input_year)
 
         elif "ok" == input_year:
-            validate = True
+            if selected_years:
+                validate = True
+            else:
+                logger.info(f"You must select at least one year among [{' '.join(years_list)}]")
 
         else:
-            logger.info(f"{input_year} is not in {years_list}")
+            logger.info(f"Sorry '{input_year}' is not in [{' '.join(years_list)}]\n")
+
+        if selected_years == years_list:
+            validate = True
 
     # some processing
+    selected_years = np.array(selected_years)
     selected_years = np.unique(selected_years)
-    selected_years = selected_years.sort()
+    selected_years = np.sort(selected_years)
 
     return selected_years
 
@@ -178,11 +188,17 @@ def _get_years_selection(tile_folder) -> list:
     while not validate:
         selected_years = _input_years(tile_folder)
 
-        while (validate != "Y") and (validate != "n"):
-            validate = input(f"Confirm that you want to import (Y/n): {selected_years}")
+        while (validate != 'Y') and (validate != 'n'):
+            validate = input(f"\nConfirm that you want to import [{' '.join(selected_years)}] (Y/n): ")
 
-        if "n" == validate:
+        if 'Y' == validate:
             validate = True
+
+        if 'n' == validate:
+            validate = False
+
+        # juste for print design
+        logger.info("\n")
 
     return selected_years
 
