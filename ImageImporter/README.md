@@ -46,6 +46,7 @@ pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL
 
 ## How to improve ?
 
+  - Add a year selection for the importation. That can allow to just import a new year.
   - Improve passing
   - Add exceptions and errors messages. For example if some masques are missing...
   - Improve logs to better know what is done or missing (like snow mask)

@@ -47,4 +47,7 @@ pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL
 
 ## How to improve ?
 
+  - Add a year selection to just import new data.
+  - Add a merging new years option to the old dataset.
+
 
