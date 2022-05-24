@@ -55,7 +55,7 @@ def _get_snow_mask_path(slice_name: str, snow_mask_tile_folder: str) -> str:
     # list of snow masks .zip
     snow_mask_list = os.listdir(snow_mask_tile_folder)
 
-    # find the  snow mask .zip corresponding to the slice
+    # find the snow mask .zip corresponding to the slice
     snow_mask = [path for path in snow_mask_list if path[11:19] == slice_name[11:19]]
 
     if snow_mask:
@@ -177,14 +177,17 @@ def _cut_save_zip_slice(slice_path: str, snow_mask_path: str, stencil_path: str,
 
                 if name == "bands":
                     layer_name = layer.split("_")[-1].split(".")[0]
+                    layer_path = f"{slice_path}/{layer}"
                     no_data = -1000
 
                 elif name == "snow_mask":
+                    layer_path = f"{snow_mask_path}/{layer}"
                     layer_name = "SNW_R2"
                     no_data = 0
 
                 else:
                     layer_name = "CLM_R1"
+                    layer_path = f"{slice_path}/{layer}"
                     no_data = 0
 
                 layer_out_path = os.path.join(slice_out_folder, f"{dir_slice_name}_{layer_name}")
@@ -192,7 +195,7 @@ def _cut_save_zip_slice(slice_path: str, snow_mask_path: str, stencil_path: str,
                 # cutting .zip layer
                 sortieTif = gdal.Warp(
                     layer_out_path,
-                    f"/vsizip/{slice_path}/{layer}",  # we use the vsizip protocol
+                    f"/vsizip/{layer_path}",  # we use the vsizip protocol
                     creationOptions=[
                         "COMPRESS=LZW",
                         "PREDICTOR=2",
