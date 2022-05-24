@@ -3,6 +3,8 @@ from time import perf_counter  # to calculate the computation time
 import logging  # a logger
 
 # My imports
+import numpy as np
+
 from DatasetBuilder.src.fonction import build_TileCubes_dict
 from DatasetBuilder.src.fonction import building_and_save_dataset, merge_dataset
 
@@ -39,71 +41,20 @@ stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
 
 
-def dataset_builder(tile_folder: str, tfe_folder: str, dataset_path: str) -> None:
-    """this is function build a dataset from Sentinel-2 images
-    and the ground truth data
-    """
-
-    logger.info(
-        f"""
-    #===========================================#
-    # The script to build a dataset has launch! #
-    #===========================================#
-        
-        The tiles given are stored in:
-            {tfe_folder}
-        
-        The ground truth given are on TFE files stored in:
-            {tfe_folder}
-            
-        Dataset will stored as netCDF4 files in:
-            {dataset_path}
-            
-    """
-    )
-
-    # build a dict of TileCube object
-    logger.info(
-        """
-    Building a dict of TileCube object...
-    -------------------------------------
-    """
-    )
-    TileCube_dict = build_TileCubes_dict(tile_folder, tfe_folder)
-
-    # build one dataset per TileCube
-    logger.info(
-        """
-    Building one dataset per TileCube...
-    ------------------------------------
-    """
-    )
-    building_and_save_dataset(TileCube_dict, dataset_path)
-
-    # merge all datasets in "dataset.nc" stored in the dataset folder given
-    logger.info(
-        """
-    Merging all dataset...
-    ----------------------
-    """
-    )
-    merge_dataset(dataset_path)
-
-
-def get_tile_folder() -> str:
+def get_main_folder() -> str:
     """ask the use to choose the folder where tiles datas are stored"""
 
-    tile_folder = input(
+    main_folder = input(
         """
     Enter the path to the tiles folder:
-    (if nothing is specified, by default in "data/applicationMasqueFull/sortie")
+    (if nothing is specified, by default in "data/2_applicationMasque")
     --> """
     )
 
-    if tile_folder == "":
-        tile_folder = "data/applicationMasqueFull/sortie"
+    if main_folder == "":
+        main_folder = "data/2_applicationMasque"
 
-    return tile_folder
+    return main_folder
 
 
 def get_tfe_folder() -> str:
@@ -142,10 +93,10 @@ def set_folder() -> tuple:
     """defined where tiles data and TFE are, and where the datasets will save"""
 
     # set where tile are stored
-    tile_path = get_tile_folder()
+    tile_path = get_main_folder()
     while not os.path.exists(tile_path):
         logger.warning(f"'{tile_path}' is not a path. Please enter a valid path.")
-        tile_path = get_tile_folder()
+        tile_path = get_main_folder()
 
     # set where TFE are stored
     tfe_path = get_tfe_folder()
@@ -161,14 +112,147 @@ def set_folder() -> tuple:
     return tile_path, tfe_path, dataset_path
 
 
+def _input_years(tile_folder: str) -> list:
+    """ask the user to input a years list
+
+    Parameters
+    ----------
+        tile_folder:  folder where tiles datas are stored
+
+    Returns
+    -------
+        selected_years: the list of selected years
+    """
+
+    selected_years = []
+    years_list = os.listdir(tile_folder)
+
+    logger.info(
+        f"""The lies datas folder contain those years: 
+        {years_list}
+        """
+    )
+
+    logger.info(
+        "Input all years you want imported to the dataset or ok when your have finished (year/all/ok):"
+    )
+
+    validate = False
+    while not validate:
+        input_year = input("--> ")
+
+        if "all" == input_year:
+            return years_list
+
+        elif input_year in years_list:
+            selected_years.apend(input_year)
+
+        elif "ok" == input_year:
+            validate = True
+
+        else:
+            logger.info(f"{input_year} is not in {years_list}")
+
+    # some processing
+    selected_years = np.unique(selected_years)
+    selected_years = selected_years.sort()
+
+    return selected_years
+
+
+def _get_years_selection(tile_folder) -> list:
+    """validated years list selection
+
+    Parameters
+    ----------
+        tile_folder:  folder where tiles datas are stored
+
+    Returns
+    -------
+        selected_years: the validated list of selected years
+    """
+
+    selected_years = None
+    validate = False
+
+    while not validate:
+        selected_years = _input_years(tile_folder)
+
+        while (validate != "Y") and (validate != "n"):
+            validate = input(f"Confirm that you want to import (Y/n): {selected_years}")
+
+        if "n" == validate:
+            validate = True
+
+    return selected_years
+
+
+def dataset_builder(main_folder: str, tfe_folder: str, dataset_folder: str) -> None:
+    """this is function build a dataset from Sentinel-2 images
+    and the ground truth data
+    """
+
+    logger.info(
+        f"""
+    #===========================================#
+    # The script to build a dataset has launch! #
+    #===========================================#
+        
+        The tiles given are stored in:
+            {main_folder}
+        
+        The ground truth given are on TFE files stored in:
+            {tfe_folder}
+            
+        Dataset will stored as netCDF4 files in:
+            {dataset_folder}
+            
+    """
+    )
+
+    # get the parsed selected years list
+    selected_years = _get_years_selection(main_folder)
+
+    # TODO: ask to merge the new imported dataset to 'raw_dataset.nc'
+
+    # build a dict of TileCube object
+    logger.info(
+        """
+    Building a dict of TileCube object...
+    -------------------------------------
+    """
+    )
+    year_dict = build_TileCubes_dict(main_folder, tfe_folder, selected_years)
+
+    # build one dataset per TileCube
+    logger.info(
+        """
+    Building one dataset per TileCube...
+    ------------------------------------
+    """
+    )
+
+    building_and_save_dataset(year_dict, dataset_folder)
+
+    # merge all datasets in "dataset.nc" stored in the dataset folder given
+    logger.info(
+        """
+    Merging all dataset...
+    ----------------------
+    """
+    )
+
+    merge_dataset(dataset_folder)
+
+
 def main() -> None:
     """main function of the DatasetBuilder"""
 
     time_start = perf_counter()
     # set paths
-    tile_path, tfe_path, dataset_path = set_folder()
+    main_folder, tfe_folder, dataset_folder = set_folder()
     # run the dataset_builder
-    dataset_builder(tile_path, tfe_path, dataset_path)
+    dataset_builder(main_folder, tfe_folder, dataset_folder)
 
     time_end = perf_counter()
 

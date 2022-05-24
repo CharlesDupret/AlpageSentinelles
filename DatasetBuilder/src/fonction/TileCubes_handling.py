@@ -38,43 +38,68 @@ stream_handler.setFormatter(stream_formatter)
 logger.addHandler(stream_handler)
 
 
-def build_TileCubes_dict(tile_folder: str, tfe_folder: str) -> dict:
+def build_TileCubes_dict(
+    main_folder: str, tfe_folder: str, selected_years: list
+) -> dict:
     """build a dict of TileCubes.
 
     Parameters
     ----------
-
-        tile_folder: the path to the file where datas are stored
-
-        tfe_folder: the path to the file where TFE are stored
+        main_folder: the path to the folder where all years are stored
+        tfe_folder: the path to the folder where TFE are stored
+        selected_years: the list of selected years to building dataset
 
     Return
     ------
+        dict of dict TileCube where keys are the years and values dict
+    """
 
+    year_dict = {}
+
+    # loop over all selected years
+    for year in tqdm(selected_years):
+
+        # defined paths
+        year_folder = f"{main_folder}/{year}"
+
+        # sorting the year dict
+        year_dict[year] = _build_TileCubes_dict_by_year(year_folder, tfe_folder)
+        logger.info(f"The TileCube dictionary of {year} has been created")
+
+    return year_dict
+
+
+def _build_TileCubes_dict_by_year(year_folder: str, tfe_folder: str) -> dict:
+    """build a dict of TileCubes.
+
+    Parameters
+    ----------
+        year_folder: the path to the folder where datas of the year are stored
+        tfe_folder: the path to the folder where TFE are stored
+
+    Return
+    ------
         dict of TileCube where keys are the names of the tiles
     """
 
     # initialization
     tileCube_dict = {}
-    tile_list = os.listdir(tile_folder)
+    tile_list = os.listdir(year_folder)
     tfe_list = [f for f in os.listdir(tfe_folder) if f.endswith(".shp")]
 
-    # import through all directories
-    for tile in tqdm(tile_list):
-        tile_path = os.path.join(tile_folder, tile)
+    # import over all tiles
+    for tile in tile_list:
+        tile_path = f"{year_folder}/{tile}"
 
         # find the right TFE
-        tile_name = tile[6:]
-        tfe_name = [tfe_path for tfe_path in tfe_list if tile_name in tfe_path][0]
-        tfe_path = os.path.join(tfe_folder, tfe_name)
+        tfe_name = [tfe_path for tfe_path in tfe_list if tile in tfe_path][0]
+        tfe_path = f"{tfe_folder}/{tfe_name}"
 
         # build the TileCube
         cube = TileCube(tile_path, tfe_path)
 
-        # storing in dict
+        # storing the tile dict
         logger.info(f"add {cube} into the TileCube_dict")
-        tileCube_dict[tile_name] = cube
-
-    logger.info("The TileCube dictionary has been created")
+        tileCube_dict[tile] = cube
 
     return tileCube_dict
