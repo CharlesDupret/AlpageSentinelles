@@ -140,7 +140,7 @@ def image_importer(raw_folder: str, data_folder: str) -> None:
         logger.info(
             """
         Applying masks on cut images...
-        -------------------------------------
+        -------------------------------
         """
         )
         # apply cloud and snow mask on cut tiles
