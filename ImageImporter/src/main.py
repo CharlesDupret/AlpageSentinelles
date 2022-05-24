@@ -116,9 +116,10 @@ def image_importer(raw_folder: str, data_folder: str) -> None:
     cutting = input("--> Cut and save Sentinel2 tiles (Y/n): ")
     masking = input("--> apply cloud and snow mask on cut tiles (Y/n): ")
 
-    if cutting == 'Y':
+    if cutting == "Y":
 
-        logger.info("""
+        logger.info(
+            """
         Cutting raw_images and mask...
         ------------------------------
         """
@@ -128,13 +129,16 @@ def image_importer(raw_folder: str, data_folder: str) -> None:
         tiles_cutting(raw_folder, data_folder)
 
     else:
-        logger.info("""
+        logger.info(
+            """
         /!\ The cutting has been skipped
-        """)
+        """
+        )
 
-    if masking == 'Y':
+    if masking == "Y":
 
-        logger.info("""
+        logger.info(
+            """
         Applying masks on cut images...
         -------------------------------------
         """
@@ -143,9 +147,11 @@ def image_importer(raw_folder: str, data_folder: str) -> None:
         tiles_masking(data_folder)
 
     else:
-        logger.info("""
+        logger.info(
+            """
         /!\ The masking has been skipped
-        """)
+        """
+        )
 
 
 def main() -> None:
