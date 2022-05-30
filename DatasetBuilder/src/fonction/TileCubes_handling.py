@@ -89,7 +89,7 @@ def _build_TileCubes_dict_by_year(year: str, year_folder: str, tfe_folder: str) 
     tfe_list = [f for f in os.listdir(tfe_folder) if f.endswith(".shp")]
 
     # import over all tiles
-    for tile in tqdm(tile_list, desc=f"Build TileCube dict in {year}", initial=1):
+    for tile in tqdm(tile_list, desc=f"Build TileCube dict in {year}: ", initial=1):
         tile_path = f"{year_folder}/{tile}"
 
         # find the right TFE
