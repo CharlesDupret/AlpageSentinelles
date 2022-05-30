@@ -57,24 +57,24 @@ def build_TileCubes_dict(
     year_dict = {}
 
     # loop over all selected years
-    for year in tqdm(selected_years, initial=1):
-        logger.info(f"{year} in processing")
+    for year in tqdm(selected_years, desc="Build TileCube over years", initial=1):
 
         # defined paths
         year_folder = f"{main_folder}/{year}"
 
         # sorting the year dict
-        year_dict[year] = _build_TileCubes_dict_by_year(year_folder, tfe_folder)
+        year_dict[year] = _build_TileCubes_dict_by_year(year, year_folder, tfe_folder)
         logger.info(f"The TileCube dictionary of {year} has been created")
 
     return year_dict
 
 
-def _build_TileCubes_dict_by_year(year_folder: str, tfe_folder: str) -> dict:
+def _build_TileCubes_dict_by_year(year: str, year_folder: str, tfe_folder: str) -> dict:
     """build a dict of TileCubes.
 
     Parameters
     ----------
+        year: the considered year
         year_folder: the path to the folder where datas of the year are stored
         tfe_folder: the path to the folder where TFE are stored
 
@@ -89,7 +89,7 @@ def _build_TileCubes_dict_by_year(year_folder: str, tfe_folder: str) -> dict:
     tfe_list = [f for f in os.listdir(tfe_folder) if f.endswith(".shp")]
 
     # import over all tiles
-    for tile in tqdm(tile_list, initial=1):
+    for tile in tqdm(tile_list, desc=f"Build TileCube dict in {year}", initial=1):
         tile_path = f"{year_folder}/{tile}"
 
         # find the right TFE
