@@ -31,14 +31,8 @@ class TileSlice:
             "B12",
         ]
 
-        # pop mask path and sort the list
-        mask_path = list_dir[-1]
-        list_dir = np.delete(list_dir, -1)
+        # sort bands the list
         list_dir = np.roll(list_dir, -2)
-
-        # get information about the mask
-        mask_path = os.path.join(path, mask_path)
-        open_mask = gdal.Open(mask_path)
 
         # initialize the attributes of the tile
         self.__name = os.path.split(path)[1]
@@ -46,7 +40,6 @@ class TileSlice:
         self.bands = {
             name: Layer(os.path.join(path, d)) for d, name in zip(list_dir, bands_names)
         }
-        self.mask = open_mask.GetRasterBand(1)
 
     def __repr__(self) -> str:
         return f"Tile {self.__name} on {self.__date}"
