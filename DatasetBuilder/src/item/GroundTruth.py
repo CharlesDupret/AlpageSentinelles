@@ -16,10 +16,9 @@ class GroundTruth:
 
         self.__name = os.path.split(path)[1]
         self.__path = path
-        self.tfe = df.set_index("Id_sitesAS")  # using the unique index
+        self.tfe = df.set_index("ID_SITESAS")  # using the unique index
 
         # TFE update
-        self.tfe.drop(labels="MILIEU", axis=1)
         self.tfe.drop(labels="MILIEU", axis=1)
 
         # used with old TFE
