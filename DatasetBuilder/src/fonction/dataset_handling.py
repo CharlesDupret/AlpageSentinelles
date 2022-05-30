@@ -44,6 +44,13 @@ def building_and_save_dataset(year_dict: dict, dataset_folder) -> None:
         dataset_folder: path to the dataset folder
     """
 
+    # DEBUG
+    logger.debug(f"____________________________________________")
+    logger.debug(f"")
+    logger.debug(f"year_dict: {year_dict}")
+    logger.debug(f"")
+    logger.debug(f"____________________________________________")
+
     # loop over all years
     for year, TileCube_dict in year_dict.items():
         year_dataset_folder = f"{dataset_folder}/{year}"
@@ -65,6 +72,15 @@ def _building_and_save_dataset_by_year(
 
     # build and save one dataset per TileCube
     for cube_name, cube in tqdm(TileCube_dict.items(), initial=1):
+
+        # DEBUG
+        logger.debug(f"____________________________________________")
+        logger.debug(f"")
+        logger.debug(f"TileCube_dict: {TileCube_dict}")
+        logger.debug(f"")
+        logger.debug(f"cube in process: {cube}")
+        logger.debug(f"")
+        logger.debug(f"____________________________________________")
 
         # create a xr.dataset with the poi of the TileCube
         da = cube.quick_fill_dataset()
