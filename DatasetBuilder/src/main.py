@@ -137,7 +137,7 @@ def _input_years(tile_folder: str) -> list:
     logger.info(f"The data folder contain those years: {' '.join(years_list)}")
 
     logger.info(
-        "Input all years that you want to import to the dataset. Tap 'ok' when your have finished:\n"
+        "Input all years that you want to import to the dataset. Tap 'ok' when you have finished:\n"
     )
 
     validate = False
