@@ -57,7 +57,7 @@ def build_TileCubes_dict(
     year_dict = {}
 
     # loop over all selected years
-    for year in tqdm(selected_years, desc="Build TileCube over years", initial=1):
+    for year in selected_years:
 
         # defined paths
         year_folder = f"{main_folder}/{year}"
