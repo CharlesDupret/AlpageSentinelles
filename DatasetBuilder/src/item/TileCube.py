@@ -87,28 +87,7 @@ class TileCube:
             # loop through each variable
             for poi_name, bands in s.get_poi_slice(poi).items():
 
-                # DEBUG
-
-                print(f"""
-
------- DEBUG ----------------------------
-slice: {s}
-time: {time}
-
-poi_name: {poi_name}
-bands: {bands}
-""")
-
                 for i, b in enumerate(bands_names):
-
-                    # DEBUG
-                    print(f"""
-enumerate(bands_names) :
-i: {i}
-b: {b}
-
---------------------------------------------
-""")
                     bands_dict[b][poi_name].append(bands[i])
 
         # make a dict dataframe for each bands
