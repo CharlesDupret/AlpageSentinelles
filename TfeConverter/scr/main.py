@@ -7,7 +7,10 @@ from tqdm import tqdm
 
 # TODO: add a log and some parsing
 
-def get_pts_inside_polygon(polygon_name: str, polygon: Polygon, *, resolution=10) -> dict:
+
+def get_pts_inside_polygon(
+    polygon_name: str, polygon: Polygon, *, resolution=10
+) -> dict:
     """get all point inside a Polygon with a given resolution
 
     Parameters
@@ -25,11 +28,17 @@ def get_pts_inside_polygon(polygon_name: str, polygon: Polygon, *, resolution=10
     latmin, lonmin, latmax, lonmax = polygon.bounds
 
     # build grid which contain the polygon
-    X, Y = np.meshgrid(np.arange(latmin, latmax, resolution), np.arange(lonmin, lonmax, resolution))
+    X, Y = np.meshgrid(
+        np.arange(latmin, latmax, resolution), np.arange(lonmin, lonmax, resolution)
+    )
     point_list = [Point(x, y) for x, y in zip(X.flatten(), Y.flatten())]
 
     # get only points inside the polygon
-    point_dict = {f"{polygon_name}_{i}": p for i, p in enumerate(point_list) if polygon.contains(p)}
+    point_dict = {
+        f"{polygon_name}_{i}": p
+        for i, p in enumerate(point_list)
+        if polygon.contains(p)
+    }
 
     return point_dict
 
@@ -73,7 +82,11 @@ def convert_tfe_polygon_to_pts(tfe_polygon: gpd.GeoDataFrame) -> gpd.GeoDataFram
 
 
 def build_point_tfe(path_to_polygon_tfe: str, save_path: str) -> None:
-    tfe_polygon_list = [t for t in os.listdir(path_to_polygon_tfe) if (".shp" in t) and (".xml" not in t)]
+    tfe_polygon_list = [
+        t
+        for t in os.listdir(path_to_polygon_tfe)
+        if (".shp" in t) and (".xml" not in t)
+    ]
 
     for tfe_polygon_name in tqdm(tfe_polygon_list, desc="Convert polygon TFE: "):
         tfe_path = f"{path_to_polygon_tfe}/{tfe_polygon_name}"
