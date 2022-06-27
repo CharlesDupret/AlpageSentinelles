@@ -142,7 +142,6 @@ def _apply_masks_on_slice(slice_path: str, saving_slice_folder: str) -> None:
         profile.update(dtype=rasterio.float64, count=1, compress="lzw", nodata=np.nan)
 
         # band filtering
-        filtered_band = band_val.astype(np.float64)
         filtered_band = np.where(master_mask == 0, band_val, np.nan)
         filtered_band /= 10000
 
