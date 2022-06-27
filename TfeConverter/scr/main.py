@@ -5,6 +5,7 @@ import numpy as np
 from shapely.geometry import Point, Polygon
 from tqdm import tqdm
 
+# TODO: add a log and some parsing
 
 def get_pts_inside_polygon(polygon_name: str, polygon: Polygon, *, resolution=10) -> dict:
     """get all point inside a Polygon with a given resolution
