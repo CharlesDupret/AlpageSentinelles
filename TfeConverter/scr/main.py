@@ -87,8 +87,40 @@ def build_point_tfe(path_to_polygon_tfe: str, save_path: str) -> None:
         tfe_point.to_file(save_name, driver="GeoJSON")
 
 
-def main() -> None:
-    path_to_polygon_tfe = "TFE/TFE_2/polygon_TFE"
-    save_path = "TFE/TFE_2/point_TFE"
+def get_polygon_tfe_folder() -> str:
+    """ask the use to choose the folder where polygons tfe are stored"""
 
-    build_point_tfe(path_to_polygon_tfe, save_path)
+    polygon_tfe_folder = input(
+        """
+    Enter the path to the TFE folder:
+    (if nothing is specified, by default in "TFE/TFE_2/polygon_TFE")
+    --> """
+    )
+
+    if polygon_tfe_folder == "":
+        polygon_tfe_folder = "TFE/TFE_2/polygon_TFE"
+
+    return polygon_tfe_folder
+
+
+def get_save_path() -> str:
+    """ask the use to choose the folder where polygons tfe are stored"""
+
+    save_path = input(
+        """
+    Enter the path to the TFE folder:
+    (if nothing is specified, by default in "TFE/TFE_2/point_TFE")
+    --> """
+    )
+
+    if save_path == "":
+        save_path = "TFE/TFE_2/point_TFE"
+
+    return save_path
+
+
+def main() -> None:
+    polygon_tfe_folder = get_polygon_tfe_folder()
+    save_path = get_save_path()
+
+    build_point_tfe(polygon_tfe_folder, save_path)
