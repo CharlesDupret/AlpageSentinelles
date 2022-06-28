@@ -25,7 +25,7 @@ if not os.path.exists(DIR):
 
 # logger config
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 # define formats
 file_formatter = logging.Formatter("[%(levelname)s] %(asctime)s - %(message)s")
@@ -33,7 +33,7 @@ stream_formatter = logging.Formatter("%(message)s")
 
 # log file
 file_handler = logging.FileHandler(LOG_PATH)
-file_handler.setLevel(logging.DEBUG)
+file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
