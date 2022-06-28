@@ -70,8 +70,18 @@ def convert_tfe_polygon_to_pts(tfe_polygon: gpd.GeoDataFrame) -> gpd.GeoDataFram
             name_list = list(dict_point.keys())
             pts_list = list(dict_point.values())
             typo_list = np.full(len(name_list), tfe_polygon.typo_AS[index])
+            massif_list = np.full(len(name_list), tfe_polygon.MASSIF_AS[index])
+            area_list = np.full(len(name_list), tfe_polygon.territoire[index])
 
-            df = pd.DataFrame({"TYPO_VEGET": typo_list}, index=name_list)
+            df = pd.DataFrame(
+                {
+                    "TYPO_VEGET": typo_list,
+                    "MASSIF_AS": massif_list,
+                    "TERRITOIRE": area_list,
+                },
+                index=name_list,
+            )
+            df.index.name = "ID_SITESAS"
             gdf = gpd.GeoDataFrame(df, geometry=pts_list, crs=tfe_polygon.crs)
             tfe_point = tfe_point.append(gdf)
 
