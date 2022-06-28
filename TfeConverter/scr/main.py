@@ -152,12 +152,12 @@ def get_polygon_tfe_folder() -> str:
     polygon_tfe_folder = input(
         """
     Enter the path to the TFE folder:
-    (if nothing is specified, by default in "TFE/TFE_2/polygon_TFE")
+    (if nothing is specified, by default in "data/TFE/TFE_2/polygon_TFE")
     --> """
     )
 
     if polygon_tfe_folder == "":
-        polygon_tfe_folder = "TFE/TFE_2/polygon_TFE"
+        polygon_tfe_folder = "data/TFE/TFE_2/polygon_TFE"
 
     return polygon_tfe_folder
 
@@ -168,12 +168,12 @@ def get_save_path() -> str:
     save_path = input(
         """
     Enter the path to the TFE folder:
-    (if nothing is specified, by default in "TFE/TFE_2/point_TFE")
+    (if nothing is specified, by default in "data/TFE/TFE_2/point_TFE")
     --> """
     )
 
     if save_path == "":
-        save_path = "TFE/TFE_2/point_TFE"
+        save_path = "data/TFE/TFE_2/point_TFE"
 
     return save_path
 
@@ -214,7 +214,7 @@ def main() -> None:
     h = delta // 3600
     m = (delta - h * 3600) // 60
     s = int(delta - h * 3600 - m * 60)
-    
+
     # display process time
     logger.info(
         f"""
