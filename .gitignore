@@ -1,6 +1,8 @@
 # Environments
 AlpageSentinellesEnv/
 
+data/
+
 # Editor
 .idea
 
