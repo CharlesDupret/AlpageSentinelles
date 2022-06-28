@@ -4,8 +4,43 @@ import geopandas as gpd
 import numpy as np
 from shapely.geometry import Point, Polygon
 from tqdm import tqdm
+import logging  # a logger
+from time import perf_counter  # to calculate the computation time
 
-# TODO: add a log and some parsing
+
+# TODO: improve the log and some parsing
+
+# logger configuration
+DIR = "log/"
+LOG_FILE = f"{__name__}.log"
+
+LOG_PATH = os.path.join(DIR, LOG_FILE)
+
+# clean previous log file
+if os.path.exists(LOG_PATH):
+    os.remove(LOG_PATH)
+
+if not os.path.exists(DIR):
+    os.makedirs(DIR)
+
+# logger config
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# define formats
+file_formatter = logging.Formatter("[%(levelname)s] %(asctime)s - %(message)s")
+stream_formatter = logging.Formatter("%(message)s")
+
+# log file
+file_handler = logging.FileHandler(LOG_PATH)
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+# stream log
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(stream_formatter)
+logger.addHandler(stream_handler)
 
 
 def get_pts_inside_polygon(
@@ -98,7 +133,7 @@ def build_point_tfe(path_to_polygon_tfe: str, save_path: str) -> None:
         if (".shp" in t) and (".xml" not in t)
     ]
 
-    for tfe_polygon_name in tqdm(tfe_polygon_list, desc="Convert polygon TFE: "):
+    for tfe_polygon_name in tqdm(tfe_polygon_list, desc="TFE_polygon conversion in progress:"):
         tfe_path = f"{path_to_polygon_tfe}/{tfe_polygon_name}"
         tfe_polygon = gpd.read_file(tfe_path)
 
@@ -144,7 +179,48 @@ def get_save_path() -> str:
 
 
 def main() -> None:
+    """main function of the TfeConverter"""
+
+    # start time
+    time_start = perf_counter()
+
+    # get used paths
     polygon_tfe_folder = get_polygon_tfe_folder()
     save_path = get_save_path()
 
+    logger.info(
+        f"""
+                #=====================================================================#
+                # The script to convert polygons_TFE to points_TFE has been launched! #
+                #=====================================================================#
+
+                    The the folder which contain polygons_TFE given is:
+                        {polygon_tfe_folder}
+
+                    Out datas will be saved in:
+                        {save_path}
+
+                """
+    )
+
+    # apply conversion the function
     build_point_tfe(polygon_tfe_folder, save_path)
+
+    # end time
+    time_end = perf_counter()
+
+    # Compute the process time
+    delta = time_end - time_start
+    h = delta // 3600
+    m = (delta - h * 3600) // 60
+    s = int(delta - h * 3600 - m * 60)
+    
+    # display process time
+    logger.info(
+        f"""
+    The script had successfully run!
+    --------------------------------
+
+    {__name__} was executed in {h} hours {m} minutes and {s} seconds
+            """
+    )
