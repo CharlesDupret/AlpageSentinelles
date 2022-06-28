@@ -26,7 +26,9 @@ classification of mountain pasture characteristics from Sentinel-2 spectral imag
 [masks](https://sentinel.esa.int/web/sentinel/technical-guides/sentinel-2-msi/level-1c/masks) according area of 
 interest around alpine pasture establish by [AlpageSentinelles](https://www.alpages-sentinelles.fr/).
 
-  2. [`DatasetBuilder`](DatasetBuilder): Build a dataset based on the ground truth establish by
+  2. [`TfeConverter`](TfeConverter): convert TFE ground truth based on polygon to a TFE based on points.
+
+  3. [`DatasetBuilder`](DatasetBuilder): Build a dataset based on the ground truth establish by
      [AlpageSentinelles](https://www.alpages-sentinelles.fr/).
   
      

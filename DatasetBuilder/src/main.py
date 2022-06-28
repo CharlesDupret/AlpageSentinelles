@@ -63,12 +63,12 @@ def get_tfe_folder() -> str:
     tfe_folder = input(
         """
     Enter the path to the TFE folder:
-    (if nothing is specified, by default in "data/TFE")
+    (if nothing is specified, by default in "data/TFE/TFE_1")
     --> """
     )
 
     if tfe_folder == "":
-        tfe_folder = "data/TFE"
+        tfe_folder = "data/TFE/TFE_1"
 
     return tfe_folder
 
